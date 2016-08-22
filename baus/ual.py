@@ -136,7 +136,8 @@ def ual_initialize_residential_units(buildings, ual_settings):
             ColumnSpec('unit_residential_rent', min=0, missing=False),
             ColumnSpec('building_id', foreign_key='buildings.building_id', missing=False),
             ColumnSpec('unit_num', min=0, missing=False),
-            ColumnSpec('submarket_id', foreign_key='zones.zone_id', missing=False))))
+            ColumnSpec('submarket_id', foreign_key='zones.zone_id', missing=False)),
+        InjectableSpec('unit_aggregations', registered=True)))
     return
 
         
@@ -696,14 +697,43 @@ def ual_rsh_simulate(residential_units, unit_aggregations, settings):
     
     Data expectations
     -----------------
-    - tk
+    - from "rsh.yaml"
+    
     """
+    # Verify initial data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('residential_units',
+            ColumnSpec('unit_residential_price', registered=True)),
+        TableSpec('buildings',
+            ColumnSpec('sqft_per_unit', min=0, missing=False),
+            ColumnSpec('transit_type', missing=False),
+            ColumnSpec('is_sanfran', min=0, missing=False),
+            ColumnSpec('modern_condo', min=0, max=1, missing=False),
+            ColumnSpec('historic', min=0, max=1, missing=False),
+            ColumnSpec('new_construction', min=0, max=1, missing=False)),
+        TableSpec('nodes',
+            ColumnSpec('residential_units_1500', min=0, missing=False),
+            ColumnSpec('ave_income_1500', min=0, missing=False),
+            ColumnSpec('sfdu', min=0, missing=False)),
+        TableSpec('tmnodes',
+            ColumnSpec('jobs_45', min=0, missing=False),
+            ColumnSpec('embarcadero', min=0, missing=False),
+            ColumnSpec('pacheights', min=0, missing=False),
+            ColumnSpec('stanford', min=0, missing=False)),
+        InjectableSpec('unit_aggregations', can_be_generated=True),
+        InjectableSpec('settings', can_be_generated=True)))
+
     utils.hedonic_simulate(cfg = 'rsh.yaml', 
                            tbl = residential_units, 
                            join_tbls = unit_aggregations, 
                            out_fname = 'unit_residential_price')
     
     _mtc_clip(residential_units, 'unit_residential_price', settings)
+    
+    #Verify final data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('residential_units',
+            ColumnSpec('unit_residential_price', min=0, missing=False))))
     return
 
 
@@ -714,14 +744,35 @@ def ual_rrh_simulate(residential_units, unit_aggregations, settings):
     
     Data expectations
     -----------------
-    - tk
+    - from "ual_rrh.yaml"
+    
     """
+    # Verify initial data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('residential_units',
+            ColumnSpec('unit_residential_rent', registered=True)),
+        TableSpec('buildings',
+            ColumnSpec('sqft_per_unit', min=0, missing=False)),
+        TableSpec('nodes',
+            ColumnSpec('residential_units_1500', min=0, missing=False),
+            ColumnSpec('ave_income_1500', min=0, missing=False),
+            ColumnSpec('sfdu', min=0, missing=False)),
+        TableSpec('tmnodes',
+            ColumnSpec('jobs_45', min=0, missing=False)),
+        InjectableSpec('unit_aggregations', can_be_generated=True),
+        InjectableSpec('settings', can_be_generated=True)))
+    
     utils.hedonic_simulate(cfg = 'ual_rrh.yaml', 
                            tbl = residential_units,
                            join_tbls = unit_aggregations, 
                            out_fname = 'unit_residential_rent')
 
     _mtc_clip(residential_units, 'unit_residential_rent', settings, price_scale=0.05/12)
+    
+    #Verify final data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('residential_units',
+            ColumnSpec('unit_residential_rent', min=0, missing=False))))
     return
 
 
