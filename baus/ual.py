@@ -706,7 +706,7 @@ def ual_rsh_simulate(residential_units, unit_aggregations, settings):
             ColumnSpec('unit_residential_price', registered=True)),
         TableSpec('buildings',
             ColumnSpec('sqft_per_unit', min=0, missing=False),
-            ColumnSpec('transit_type', missing=False),
+            ColumnSpec('transit_type', missing=''),
             ColumnSpec('is_sanfran', min=0, missing=False),
             ColumnSpec('modern_condo', min=0, max=1, missing=False),
             ColumnSpec('historic', min=0, max=1, missing=False),
@@ -799,9 +799,10 @@ def ual_households_relocation(households, ual_settings):
     # Verify expected data characteristics
     ot.assert_orca_spec(OrcaSpec('',
         TableSpec('households',
-            ColumnSpec('hownrent', numeric=True, min=1, max=2, missing=False),
-            ColumnSpec('building_id', numeric=True, missing_val_coding=-1),
-            ColumnSpec('unit_id', numeric=True, missing_val_coding=-1))))
+            ColumnSpec('hownrent', min=1, max=2, missing=False),
+            ColumnSpec('building_id', foreign_key='buildings.building_id', missing_val_coding=-1),
+            ColumnSpec('unit_id', foreign_key='residential_units.unit_id', missing_val_coding=-1)),
+        InjectableSpec('ual_settings', has_key='relocation_rates')))
     
     rates = pd.DataFrame.from_dict(ual_settings['relocation_rates'])
 
@@ -816,6 +817,12 @@ def ual_households_relocation(households, ual_settings):
     households.update_col_from_series('unit_id', pd.Series(-1, index=mover_ids))
     
     print "Total currently unplaced: %d" % (households.unit_id == -1).sum()
+    
+    # Verify final data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('households',
+            ColumnSpec('building_id', foreign_key='buildings.building_id', missing_val_coding=-1),
+            ColumnSpec('unit_id', foreign_key='residential_units.unit_id', missing_val_coding=-1))))
     return
 
 
@@ -839,10 +846,41 @@ def ual_hlcm_renter_estimate(households, residential_units, unit_aggregations):
 
 @orca.step('ual_hlcm_owner_simulate')
 def ual_hlcm_owner_simulate(households, residential_units, unit_aggregations, ual_settings):
+    """
+    This matches homeowning households to appropriate housing units.
     
-    # Note that the submarket id (zone_id) needs to be in the table of alternatives,
-    # for supply/demand equilibration, and needs to NOT be in the choosers table, to
-    # avoid conflicting when the tables are joined
+    Note that the submarket id (zone_id) needs to be in the table of alternatives,
+    for supply/demand equilibration, and needs to NOT be in the choosers table, to
+    avoid conflicting when the tables are joined.
+    
+    Data expectations
+    -----------------
+    - from "ual_hlcm_owner.yaml"
+    
+    """
+    # Verify initial data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('households',
+            ColumnSpec('hownrent', min=1, max=2, missing=False),
+            ColumnSpec('income', numeric=True, missing=False),
+            ColumnSpec('base_income_octile', min=1, max=8, missing=False),
+            ColumnSpec('unit_id', foreign_key='residential_units.unit_id', missing_val_coding=-1)),
+        TableSpec('residential_units',
+            ColumnSpec('unit_id', primary_key=True),
+            ColumnSpec('submarket_id', foreign_key='zones.zone_id', missing=False),
+            ColumnSpec('hownrent', min=1, max=2, missing=False),
+            ColumnSpec('num_units', min=1, max=1, missing=False),
+            ColumnSpec('vacant_units', min=0, max=1, missing=False),
+            ColumnSpec('unit_residential_price', min=0.01, missing=False)),
+        TableSpec('nodes',
+            ColumnSpec('ave_income_1500', min=0, missing=False)),
+        TableSpec('tmnodes',
+            ColumnSpec('jobs_45', min=0, missing=False),
+            ColumnSpec('embarcadero', min=0, missing=False),
+            ColumnSpec('pacheights', min=0, missing=False),
+            ColumnSpec('stanford', min=0, missing=False)),
+        InjectableSpec('unit_aggregations', can_be_generated=True),
+        InjectableSpec('ual_settings', has_key='rent_equilibration')))
     
     return utils.lcm_simulate(cfg = 'ual_hlcm_owner.yaml', 
                               choosers = households, 
@@ -854,9 +892,51 @@ def ual_hlcm_owner_simulate(households, residential_units, unit_aggregations, ua
                               enable_supply_correction = 
                                     ual_settings.get('price_equilibration', None))
 
+    # Verify final data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('residential_units',
+            ColumnSpec('unit_id', foreign_key='residential_units.unit_id', missing_val_coding=-1))))
+    return
+
 
 @orca.step('ual_hlcm_renter_simulate')
 def ual_hlcm_renter_simulate(households, residential_units, unit_aggregations, ual_settings):
+    """
+    This matches renting households to appropriate housing units.
+    
+    Note that the submarket id (zone_id) needs to be in the table of alternatives,
+    for supply/demand equilibration, and needs to NOT be in the choosers table, to
+    avoid conflicting when the tables are joined.
+    
+    Data expectations
+    -----------------
+    - from "ual_hlcm_renter.yaml"
+    
+    """
+    # Verify initial data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('households',
+            ColumnSpec('hownrent', min=1, max=2, missing=False),
+            ColumnSpec('income', numeric=True, missing=False),
+            ColumnSpec('base_income_octile', min=1, max=8, missing=False),
+            ColumnSpec('unit_id', foreign_key='residential_units.unit_id', missing_val_coding=-1)),
+        TableSpec('residential_units',
+            ColumnSpec('unit_id', primary_key=True),
+            ColumnSpec('submarket_id', foreign_key='zones.zone_id', missing=False),
+            ColumnSpec('hownrent', min=1, max=2, missing=False),
+            ColumnSpec('num_units', min=1, max=1, missing=False),
+            ColumnSpec('vacant_units', min=0, max=1, missing=False),
+            ColumnSpec('unit_residential_price', min=0.01, missing=False)),
+        TableSpec('nodes',
+            ColumnSpec('ave_income_1500', min=0, missing=False)),
+        TableSpec('tmnodes',
+            ColumnSpec('jobs_45', min=0, missing=False),
+            ColumnSpec('embarcadero', min=0, missing=False),
+            ColumnSpec('pacheights', min=0, missing=False),
+            ColumnSpec('stanford', min=0, missing=False)),
+        InjectableSpec('unit_aggregations', can_be_generated=True),
+        InjectableSpec('ual_settings', has_key='rent_equilibration')))
+    
     return utils.lcm_simulate(cfg = 'ual_hlcm_renter.yaml', 
                               choosers = households, 
                               buildings = residential_units,
@@ -867,6 +947,11 @@ def ual_hlcm_renter_simulate(households, residential_units, unit_aggregations, u
                               enable_supply_correction = 
                                     ual_settings.get('rent_equilibration', None))
 
+    # Verify final data characteristics
+    ot.assert_orca_spec(OrcaSpec('',
+        TableSpec('residential_units',
+            ColumnSpec('unit_id', foreign_key='residential_units.unit_id', missing_val_coding=-1))))
+    return
 
 
 
