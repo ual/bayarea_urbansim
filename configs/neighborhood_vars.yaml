@@ -10,7 +10,7 @@ variable_definitions:
 
   - aggregation: sum
     dataframe: buildings
-    decay: linear
+    decay: exponential
     filters:
     - general_type == "Retail"
     name: retail_sqft_3000
@@ -19,25 +19,28 @@ variable_definitions:
 
   - aggregation: sum
     dataframe: households
-    decay: flat
+    decay: exponential
     name: sum_income_3000
     radius: 3000
     varname: income
 
   - name: residential_units_500
     dataframe: buildings
+    decay: exponential
     varname: residential_units
     radius: 500
     apply: np.log1p
 
   - name: residential_units_1500
     dataframe: buildings
+    decay: exponential
     varname: residential_units
     radius: 1500
     apply: np.log1p
 
   - name: office_1500
     dataframe: buildings
+    decay: exponential
     varname: job_spaces
     filters:
     - general_type == "Office"
@@ -46,6 +49,7 @@ variable_definitions:
 
   - name: retail_1500
     dataframe: buildings
+    decay: exponential
     varname: job_spaces
     filters:
     - general_type == "Retail"
@@ -54,6 +58,7 @@ variable_definitions:
 
   - name: industrial_1500
     dataframe: buildings
+    decay: exponential
     varname: job_spaces
     filters:
     - general_type == "Industrial"
@@ -67,7 +72,7 @@ variable_definitions:
     - general_type == "Residential"
     radius: 1500
     apply: np.log1p
-    decay: flat
+    decay: exponential
     aggregation: average
 
   - name: ave_lot_size_per_unit
@@ -77,19 +82,21 @@ variable_definitions:
     - general_type == "Residential"
     radius: 1500
     apply: np.log1p
-    decay: flat
+    decay: exponential
     aggregation: average
 
   - name: population
     filters:
     - building_id != -1
     dataframe: households
+    decay: exponential
     varname: persons
     radius: 1500
     apply: np.log1p
 
   - name: poor
     dataframe: households
+    decay: exponential
     filters:
     - income < 40000 and building_id != -1
     varname: persons
@@ -98,6 +105,7 @@ variable_definitions:
 
   - name: renters
     dataframe: households
+    decay: exponential
     filters:
     - tenure == 2 and building_id != -1
     radius: 1500
@@ -105,6 +113,7 @@ variable_definitions:
 
   - name: sfdu
     dataframe: buildings
+    decay: exponential
     filters:
     - building_type_id == 1
     radius: 1500
@@ -117,13 +126,14 @@ variable_definitions:
     varname: persons
     radius: 1500
     aggregation: average
-    decay: flat
+    decay: exponential
     apply: np.log1p
 
   - name: jobs_500
     filters:
     - building_id != -1
     dataframe: jobs
+    decay: exponential
     radius: 500
     apply: np.log1p
 
@@ -131,6 +141,7 @@ variable_definitions:
     filters:
     - building_id != -1
     dataframe: jobs
+    decay: exponential
     radius: 1500
     apply: np.log1p
   
@@ -141,7 +152,7 @@ variable_definitions:
     dataframe: households
     varname: income
     radius: 1500
-    decay: flat
+    decay: exponential
     apply: np.log1p
   
   - name: ave_income_500
@@ -151,5 +162,5 @@ variable_definitions:
     dataframe: households
     varname: income
     radius: 500
-    decay: flat
+    decay: exponential
     apply: np.log1p

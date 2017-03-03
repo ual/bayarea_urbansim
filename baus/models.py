@@ -18,10 +18,20 @@ import numpy as np
 import pandas as pd
 
 
+######## MAX ADDED THESE STEPS TO OVERWRITE URBANSIM_DEFAULTS ##############
+@orca.step('nrh_simulate')
+def nrh_simulate(buildings, aggregations):
+    return utils.hedonic_simulate("nrh.yaml", buildings, aggregations,
+                                  "non_residential_price", cast=True)
+
+
+################
+
+
 @orca.step('rsh_simulate')
 def rsh_simulate(buildings, aggregations, settings):
     utils.hedonic_simulate("rsh.yaml", buildings, aggregations,
-                           "residential_price")
+                           "residential_price", cast=True)
     if "rsh_simulate" in settings:
         low = float(settings["rsh_simulate"]["low"])
         high = float(settings["rsh_simulate"]["high"])
@@ -47,7 +57,7 @@ def hlcm_simulate(households, buildings, aggregations, settings, low_income):
                        aggregations,
                        "building_id", "residential_units",
                        "vacant_affordable_units",
-                       settings.get("enable_supply_correction", None))
+                       settings.get("enable_supply_correction", None), cast=True)
 
     os.remove(misc.config("hlcm_tmp.yaml"))
 
@@ -58,7 +68,7 @@ def hlcm_simulate(households, buildings, aggregations, settings, low_income):
                        aggregations,
                        "building_id", "residential_units",
                        "vacant_market_rate_units",
-                       settings.get("enable_supply_correction", None))
+                       settings.get("enable_supply_correction", None), cast=True)
 
 
 @orca.step('households_transition')
@@ -79,7 +89,7 @@ def households_transition(households, household_controls, year, settings):
 def households_relocation(households, settings, years_per_iter):
     rate = settings['rates']['households_relocation']
     rate = min(rate * years_per_iter, 1.0)
-    return utils.simple_relocation(households, rate, "building_id")
+    return utils.simple_relocation(households, rate, "building_id", cast=True)
 
 
 @orca.table(cache=True)
@@ -718,7 +728,7 @@ def make_network_from_settings(settings):
 @orca.injectable('net', cache=True)
 def build_networks(settings):
     nets = {}
-    pdna.reserve_num_graphs(len(settings["build_networks"]))
+    pdna.reserve_num_graphs(len(settings["build_networks"]) + 1)
 
     # yeah, starting to hardcode stuff, not great, but can only
     # do nearest queries on the first graph I initialize due to crummy
@@ -795,7 +805,7 @@ def regional_pois(settings, landmarks):
     # preprocessing step
     n = make_network(
         settings['build_networks']['drive']['name'],
-        "CTIMEV", 75)
+        "tt", 75)
 
     n.init_pois(
         num_categories=1,

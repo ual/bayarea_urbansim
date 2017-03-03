@@ -654,7 +654,7 @@ def ual_save_intermediate_tables(households, buildings, parcels, jobs, zones, ye
     This orca step saves intermediate versions of data tables, for developing 
     visualization proofs of concept. 
     """
-    filename = 'baus_' + str(year) + '.h5'
+    filename = '/project/projectdirs/m1927/urbansim/baus_' + str(year) + '_exp_decay.h5'
     for table in [households, buildings, parcels, jobs, zones]:
         table.to_frame().to_hdf(filename, table.name)
 
@@ -705,7 +705,8 @@ def ual_rsh_simulate(residential_units, unit_aggregations, settings):
     utils.hedonic_simulate(cfg = 'rsh.yaml', 
                            tbl = residential_units, 
                            join_tbls = unit_aggregations, 
-                           out_fname = 'unit_residential_price')
+                           out_fname = 'unit_residential_price',
+                           cast=True)
     
     _mtc_clip(residential_units, 'unit_residential_price', settings)
     return
