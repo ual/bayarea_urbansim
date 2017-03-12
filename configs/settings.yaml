@@ -493,11 +493,22 @@ build_networks:
   walk:
       name: 2015_06_01_osm_bayarea4326.h5
       max_distance: 3000
-  drive:
-      name: 2015_08_03_tmnet.h5
-      max_distance: 45
-      weight_col: "CTIMEA"
-
+  # drive:
+  #     name: 2015_08_03_tmnet.h5
+  #     max_distance: 45
+  #     weight_col: "CTIMEA"
+  # reg_pois:
+  #     name: 2015_08_03_tmnet.h5
+  #     max_distance: 75
+  #     weight_col: "CTIMEV"
+  drive_matsim:
+      name: sf_secondary_network_Berkeley_All_roads.h5
+      weight_col: "tt"
+      max_distance: 2700
+  reg_pois_matsim:
+      name: sf_secondary_network_Berkeley_All_roads.h5
+      weight_col: "tt"
+      max_distance: 4500
 
 households_transition:
   add_columns:

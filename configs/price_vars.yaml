@@ -10,14 +10,14 @@ variable_definitions:
 
 -   aggregation: 75pct
     dataframe: buildings
-    decay: exponential
+    decay: flat
     varname: residential_price
     radius: 2000
     name: residential
 
 -   aggregation: 75pct
     dataframe: buildings
-    decay: exponential
+    decay: flat
     filters:
     - general_type == "Retail"
     name: retail
@@ -26,7 +26,7 @@ variable_definitions:
 
 -   aggregation: 75pct
     dataframe: buildings
-    decay: exponential
+    decay: flat
     filters:
     - general_type == "Office"
     name: office
@@ -35,7 +35,7 @@ variable_definitions:
 
 -   aggregation: 75pct
     dataframe: buildings
-    decay: exponential
+    decay: flat
     filters:
     - general_type == "Industrial"
     name: industrial

@@ -787,10 +787,11 @@ def neighborhood_vars(net):
 
 @orca.step('regional_vars')
 def regional_vars(net):
-    nodes = networks.from_yaml(net["drive"], "regional_vars.yaml")
+    orca.get_table('buildings').to_frame(['residential_units','tmnode_id']).to_csv('buildings.csv')
+    nodes = networks.from_yaml(net["drive_matsim"], "regional_vars_matsim.yaml")
     nodes = nodes.fillna(0)
 
-    nodes2 = pd.read_csv('data/regional_poi_distances.csv',
+    nodes2 = pd.read_csv('data/regional_poi_distances_matsim.csv',
                          index_col="tmnode_id")
     nodes = pd.concat([nodes, nodes2], axis=1)
 
@@ -803,25 +804,26 @@ def regional_pois(settings, landmarks):
     # because of the aforementioned limit of one netowrk at a time for the
     # POIS, as well as the large amount of memory used, this is now a
     # preprocessing step
-    n = make_network(
-        settings['build_networks']['drive']['name'],
-        "tt", 75)
+    n = make_network_from_settings(
+        settings['build_networks']['reg_pois_matsim'])
 
     n.init_pois(
         num_categories=1,
-        max_dist=75,
+        max_dist=settings['build_networks']['reg_pois_matsim']['max_distance'],
         max_pois=1)
 
     cols = {}
     for locname in ["embarcadero", "stanford", "pacheights"]:
         locs = landmarks.local.query("name == '%s'" % locname)
         n.set_pois("tmp", locs.lng, locs.lat)
-        cols[locname] = n.nearest_pois(75, "tmp", num_pois=1)[1]
+        cols[locname] = n.nearest_pois(
+            settings['build_networks']['reg_pois_matsim']['max_distance'],
+            "tmp", num_pois=1)[1]
 
     df = pd.DataFrame(cols)
     print df.describe()
     df.index.name = "tmnode_id"
-    df.to_csv('regional_poi_distances.csv')
+    df.to_csv('data/regional_poi_distances_matsim.csv')
 
 
 @orca.step('price_vars')

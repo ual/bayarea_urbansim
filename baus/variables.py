@@ -1019,7 +1019,7 @@ def node_id(parcels, net):
 
 @orca.column('parcels', 'tmnode_id', cache=True)
 def node_id(parcels, net):
-    s = net["drive"].get_node_ids(parcels.x, parcels.y)
+    s = net["drive_matsim"].get_node_ids(parcels.x, parcels.y)
     fill_val = s.value_counts().index[0]
     s = s.reindex(parcels.index).fillna(fill_val).astype('int')
     return s

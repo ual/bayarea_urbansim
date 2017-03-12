@@ -30,234 +30,234 @@ models:
     1:
         fit_parameters:
             Coefficient:
-                ave_income_1500: -0.11242407046279217
-                embarcadero: -0.0379716825505516
-                jobs_45: -0.2877597929196395
-                np.log1p(unit_price): -0.6752333570869246
-                pacheights: -0.0026925985315316052
-                stanford: -0.015277827698453992
+                ave_income_1500: -0.10433091528898622
+                embarcadero: -0.0006380619733470186
+                jobs_45: -0.3261794973273756
+                np.log1p(unit_price): -0.8158524444353711
+                pacheights: 6.887041314957378e-05
+                stanford: -0.0002861574098371419
             Std. Error:
-                ave_income_1500: 0.027483310752992044
-                embarcadero: 0.0009540091616255845
-                jobs_45: 0.021542136488249205
-                np.log1p(unit_price): 0.022391333382517718
-                pacheights: 0.0007691311124539096
-                stanford: 0.0006096102966118032
+                ave_income_1500: 0.025137418105573506
+                embarcadero: 1.231499113426561e-05
+                jobs_45: 0.012910579139168635
+                np.log1p(unit_price): 0.01974996827707306
+                pacheights: 1.817111549279425e-05
+                stanford: 9.908036619058011e-06
             T-Score:
-                ave_income_1500: -4.090630545686816
-                embarcadero: -39.80222001835887
-                jobs_45: -13.357996922756783
-                np.log1p(unit_price): -30.15601373762406
-                pacheights: -3.5008316370675487
-                stanford: -25.06163000094934
+                ave_income_1500: -4.150422881570873
+                embarcadero: -51.811809394783516
+                jobs_45: -25.264513219070018
+                np.log1p(unit_price): -41.30905087996831
+                pacheights: 3.790103759831603
+                stanford: -28.881343583926704
         fitted: true
         log_likelihoods:
-            convergence: -22615.368959247542
+            convergence: -22434.85265522396
             'null': -23472.138032570383
-            ratio: 0.036501535230151205
+            ratio: 0.044192198252543724
         name: 1
     2:
         fit_parameters:
             Coefficient:
-                ave_income_1500: -0.09381761280513455
-                embarcadero: -0.021598275659732394
-                jobs_45: -0.15883416500611883
-                np.log1p(unit_price): -0.6840301679398051
-                pacheights: -0.0034251001269341554
-                stanford: -0.01153550450514808
+                ave_income_1500: -0.08004754986916716
+                embarcadero: -0.00036993493345793875
+                jobs_45: -0.1332965776689745
+                np.log1p(unit_price): -0.7875338630186354
+                pacheights: 6.763061070702034e-05
+                stanford: -0.00018721005128676554
             Std. Error:
-                ave_income_1500: 0.032044770251638335
-                embarcadero: 0.0010055078090635433
-                jobs_45: 0.022545928574889754
-                np.log1p(unit_price): 0.024320585714029758
-                pacheights: 0.0008262973305407322
-                stanford: 0.0006019992302822277
+                ave_income_1500: 0.03063067811712494
+                embarcadero: 1.3142171395459964e-05
+                jobs_45: 0.015628162638810277
+                np.log1p(unit_price): 0.02303000250590253
+                pacheights: 1.8467169517230024e-05
+                stanford: 1.000833037173706e-05
             T-Score:
-                ave_income_1500: -2.92770433579058
-                embarcadero: -21.479968096764416
-                jobs_45: -7.0449156475647845
-                np.log1p(unit_price): -28.1255630922248
-                pacheights: -4.14511822843813
-                stanford: -19.161992117066386
+                ave_income_1500: -2.613313017853638
+                embarcadero: -28.148691896206348
+                jobs_45: -8.529254573915923
+                np.log1p(unit_price): -34.195995541763075
+                pacheights: 3.6622077164516424
+                stanford: -18.705422816120837
         fitted: true
         log_likelihoods:
-            convergence: -22944.12073693324
+            convergence: -22822.862289157587
             'null': -23472.138032570383
-            ratio: 0.022495492098097536
+            ratio: 0.027661551006212037
         name: 2
     3:
         fit_parameters:
             Coefficient:
-                ave_income_1500: -0.061418149062357215
-                embarcadero: -0.022882920689491798
-                jobs_45: -0.15732420485802473
-                np.log1p(unit_price): -0.558332631026373
-                pacheights: -0.004545828125915942
-                stanford: -0.00945014374910593
+                ave_income_1500: -0.04854671570268093
+                embarcadero: -0.0003483877935025288
+                jobs_45: -0.12220223259920424
+                np.log1p(unit_price): -0.6282043975949606
+                pacheights: 8.340884591456098e-06
+                stanford: -0.00014497795217101564
             Std. Error:
-                ave_income_1500: 0.041456038791539605
-                embarcadero: 0.0011112979397074106
-                jobs_45: 0.02517722514899791
-                np.log1p(unit_price): 0.026874789308867355
-                pacheights: 0.0007689320189776718
-                stanford: 0.0006379242615650427
+                ave_income_1500: 0.03806884792395784
+                embarcadero: 1.4012590928418998e-05
+                jobs_45: 0.0169586769354948
+                np.log1p(unit_price): 0.026212322355063072
+                pacheights: 1.7169222089389215e-05
+                stanford: 1.0725672237668451e-05
             T-Score:
-                ave_income_1500: -1.4815247875272517
-                embarcadero: -20.591166303715593
-                jobs_45: -6.248671326049069
-                np.log1p(unit_price): -20.775330537834236
-                pacheights: -5.9118725891527
-                stanford: -14.813896129176133
+                ave_income_1500: -1.2752346958240643
+                embarcadero: -24.86248226913996
+                jobs_45: -7.205882455572516
+                np.log1p(unit_price): -23.9659954232792
+                pacheights: 0.48580445567250624
+                stanford: -13.516910544949766
         fitted: true
         log_likelihoods:
-            convergence: -23052.915249888432
+            convergence: -23025.83268400332
             'null': -23472.138032570383
-            ratio: 0.017860442968605117
+            ratio: 0.01901426056492006
         name: 3
     4:
         fit_parameters:
             Coefficient:
-                ave_income_1500: -0.040115035593486045
-                embarcadero: -0.01664288854993253
-                jobs_45: -0.09560890930066564
-                np.log1p(unit_price): -0.5653803174913054
-                pacheights: -0.005259556703661917
-                stanford: -0.009719554334005337
+                ave_income_1500: -0.02674868284838383
+                embarcadero: -0.0002804920256575016
+                jobs_45: -0.12447217330712657
+                np.log1p(unit_price): -0.5765375279722889
+                pacheights: 4.423837512712571e-05
+                stanford: -0.00017112800020788597
             Std. Error:
-                ave_income_1500: 0.045103780620469124
-                embarcadero: 0.0011389208206998968
-                jobs_45: 0.026641379444009232
-                np.log1p(unit_price): 0.029041023564219413
-                pacheights: 0.0007942790862376521
-                stanford: 0.0006467158739370153
+                ave_income_1500: 0.042434935721606705
+                embarcadero: 1.46664679781188e-05
+                jobs_45: 0.016678100689707473
+                np.log1p(unit_price): 0.028486586847289753
+                pacheights: 1.8274388147107664e-05
+                stanford: 1.0701463882181524e-05
             T-Score:
-                ave_income_1500: -0.8893940827497048
-                embarcadero: -14.612858284305522
-                jobs_45: -3.588737193642761
-                np.log1p(unit_price): -19.46833300283168
-                pacheights: -6.621799308068692
-                stanford: -15.02909504112766
+                ave_income_1500: -0.6303457845174522
+                embarcadero: -19.12471537632464
+                jobs_45: -7.463210327297152
+                np.log1p(unit_price): -20.23891212601138
+                pacheights: 2.420785570001556
+                stanford: -15.99108328467311
         fitted: true
         log_likelihoods:
-            convergence: -23148.354352872586
+            convergence: -23168.06278476365
             'null': -23472.138032570383
-            ratio: 0.013794383760376228
+            ratio: 0.012954731579406742
         name: 4
     5:
         fit_parameters:
             Coefficient:
-                ave_income_1500: 0.015904330738051708
-                embarcadero: -0.013355431451083756
-                jobs_45: -0.08500592707441974
-                np.log1p(unit_price): -0.3316211949956784
-                pacheights: -0.003561798049521025
-                stanford: -0.007392019389394567
+                ave_income_1500: 0.06554148170254621
+                embarcadero: -0.00014198481788287536
+                jobs_45: 0.02819415921131735
+                np.log1p(unit_price): -0.373782626055021
+                pacheights: 5.414957317822662e-05
+                stanford: -5.797247561553353e-05
             Std. Error:
-                ave_income_1500: 0.05456503104219967
-                embarcadero: 0.0012462750152178704
-                jobs_45: 0.02888998425061029
-                np.log1p(unit_price): 0.03208235489883223
-                pacheights: 0.0007833046035111542
-                stanford: 0.0006860786751240462
+                ave_income_1500: 0.051851693832330494
+                embarcadero: 1.61252317169959e-05
+                jobs_45: 0.0212981322653261
+                np.log1p(unit_price): 0.03260041053118052
+                pacheights: 1.8160312759069642e-05
+                stanford: 1.1609606152596639e-05
             T-Score:
-                ave_income_1500: 0.29147478585234504
-                embarcadero: -10.716279543443303
-                jobs_45: -2.9424012951001877
-                np.log1p(unit_price): -10.336560269388114
-                pacheights: -4.547143006124699
-                stanford: -10.774302798520965
+                ave_income_1500: 1.2640181420974117
+                embarcadero: -8.805133493568603
+                jobs_45: 1.3237855254199054
+                np.log1p(unit_price): -11.465580339778796
+                pacheights: 2.981753337435402
+                stanford: -4.993492014590627
         fitted: true
         log_likelihoods:
-            convergence: -23343.874645389005
+            convergence: -23336.25295406205
             'null': -23472.138032570383
-            ratio: 0.005464495266830682
+            ratio: 0.0057892075412890875
         name: 5
     6:
         fit_parameters:
             Coefficient:
-                ave_income_1500: 0.1279082763359828
-                embarcadero: -0.006120643869724124
-                jobs_45: 0.10350087643883966
-                np.log1p(unit_price): -0.30468055312495806
-                pacheights: -0.002429537614532732
-                stanford: -0.005583546730807289
+                ave_income_1500: 0.10765253508041862
+                embarcadero: -0.0001002975382744386
+                jobs_45: 0.07089887190469824
+                np.log1p(unit_price): -0.27198931848537267
+                pacheights: 5.420589417732543e-05
+                stanford: -5.870474015095069e-05
             Std. Error:
-                ave_income_1500: 0.05809708476852343
-                embarcadero: 0.0012688119467618678
-                jobs_45: 0.029812392596916582
-                np.log1p(unit_price): 0.03371007097946462
-                pacheights: 0.000807639538956895
-                stanford: 0.0006823649058159953
+                ave_income_1500: 0.05326721282978805
+                embarcadero: 1.621281184313914e-05
+                jobs_45: 0.02132930166006541
+                np.log1p(unit_price): 0.03414017380948453
+                pacheights: 1.8178767533872272e-05
+                stanford: 1.1536070368407928e-05
             T-Score:
-                ave_income_1500: 2.2016298553638025
-                embarcadero: -4.823917275798518
-                jobs_45: 3.4717400189324117
-                np.log1p(unit_price): -9.03826495383419
-                pacheights: -3.0081954849196655
-                stanford: -8.182640524471715
+                ave_income_1500: 2.0209905749042165
+                embarcadero: -6.186313592289177
+                jobs_45: 3.324012808044312
+                np.log1p(unit_price): -7.966840473723978
+                pacheights: 2.9818244870739594
+                stanford: -5.08879872228557
         fitted: true
         log_likelihoods:
-            convergence: -23358.76489490449
+            convergence: -23376.331101797135
             'null': -23472.138032570383
-            ratio: 0.004830115497300502
+            ratio: 0.004081730034149578
         name: 6
     7:
         fit_parameters:
             Coefficient:
-                ave_income_1500: 0.868399050377095
-                embarcadero: -0.005925570714832379
-                jobs_45: 0.11965892128194924
-                np.log1p(unit_price): -0.14579809497744856
-                pacheights: -0.002067038464075298
-                stanford: -0.003178213709875518
+                ave_income_1500: 0.8782531757997966
+                embarcadero: -0.00011291174971152966
+                jobs_45: 0.07342757003411624
+                np.log1p(unit_price): -0.11577914256796586
+                pacheights: 5.798052775886437e-05
+                stanford: -2.9402431397701152e-05
             Std. Error:
-                ave_income_1500: 0.05827830878228231
-                embarcadero: 0.001218636587819284
-                jobs_45: 0.02957483278807485
-                np.log1p(unit_price): 0.0353581895481793
-                pacheights: 0.0007626649623987191
-                stanford: 0.0006594126273643777
+                ave_income_1500: 0.05256421519993616
+                embarcadero: 1.5580807235103502e-05
+                jobs_45: 0.020575288997941855
+                np.log1p(unit_price): 0.0358984556824112
+                pacheights: 1.7030545040339736e-05
+                stanford: 1.0791797391130037e-05
             T-Score:
-                ave_income_1500: 14.900896551773384
-                embarcadero: -4.862459222101661
-                jobs_45: 4.045971185683189
-                np.log1p(unit_price): -4.123460415833314
-                pacheights: -2.710283762838781
-                stanford: -4.819764708750872
+                ave_income_1500: 16.708195346572268
+                embarcadero: -7.246848510977012
+                jobs_45: 3.5687260597633013
+                np.log1p(unit_price): -3.2251844923984567
+                pacheights: 3.404502182491967
+                stanford: -2.7245166242527414
         fitted: true
         log_likelihoods:
-            convergence: -23189.300872713295
+            convergence: -23171.37985339501
             'null': -23472.138032570383
-            ratio: 0.012049910385863338
+            ratio: 0.012813412172254401
         name: 7
     8:
         fit_parameters:
             Coefficient:
-                ave_income_1500: 1.4674377895221513
-                embarcadero: -0.010132244141963846
-                jobs_45: 0.06324029946065791
-                np.log1p(unit_price): -0.02636782764524162
-                pacheights: -0.0066051546453727945
-                stanford: -0.005457887753349096
+                ave_income_1500: 1.37950110322275
+                embarcadero: -0.0002553983840376819
+                jobs_45: -0.08852709186821776
+                np.log1p(unit_price): -0.014999277254651193
+                pacheights: -3.484674258965097e-05
+                stanford: -0.00011736095936868542
             Std. Error:
-                ave_income_1500: 0.053642480348889986
-                embarcadero: 0.001160637104791172
-                jobs_45: 0.02755464309838684
-                np.log1p(unit_price): 0.035010871588134075
-                pacheights: 0.000675644062840677
-                stanford: 0.0006145815709111675
+                ave_income_1500: 0.04910284699379255
+                embarcadero: 1.5388511671683128e-05
+                jobs_45: 0.01871134072818587
+                np.log1p(unit_price): 0.034389810132079875
+                pacheights: 1.4547712473465082e-05
+                stanford: 9.984321186267528e-06
             T-Score:
-                ave_income_1500: 27.35588995844255
-                embarcadero: -8.729898518785415
-                jobs_45: 2.295086865572948
-                np.log1p(unit_price): -0.7531325685184665
-                pacheights: -9.776086268858919
-                stanford: -8.880656387495202
+                ave_income_1500: 28.09411648569263
+                embarcadero: -16.59669170655719
+                jobs_45: -4.731199819094993
+                np.log1p(unit_price): -0.43615469806445384
+                pacheights: -2.395341718033757
+                stanford: -11.754525638668767
         fitted: true
         log_likelihoods:
-            convergence: -22475.056190991334
+            convergence: -22512.60362207099
             'null': -23472.138032570383
-            ratio: 0.042479378750903685
+            ratio: 0.04087971914479738
         name: 8
 
 fitted: true
