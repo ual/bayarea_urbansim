@@ -70,8 +70,8 @@ models:
         fitted: true
         log_likelihoods:
             convergence: -3453877.6394911087
-            'null': -3115940.795083891
-            ratio: -0.10845419301303494
+            'null': -3095334.8899371065
+            ratio: -0.11583326596408683
         name: AGREMPN
     FPSEMPN:
         fit_parameters:
@@ -114,8 +114,8 @@ models:
         fitted: true
         log_likelihoods:
             convergence: -3453877.6394911087
-            'null': -3008790.088320625
-            ratio: -0.1479290804959119
+            'null': -2981315.548124915
+            ratio: -0.15850790824990324
         name: FPSEMPN
     HEREMPN:
         fit_parameters:
@@ -158,8 +158,8 @@ models:
         fitted: true
         log_likelihoods:
             convergence: -3453877.6394911087
-            'null': -2951780.417414527
-            ratio: -0.17009978761102085
+            'null': -2971012.5955515252
+            ratio: -0.16252541125627462
         name: HEREMPN
     MWTEMPN:
         fit_parameters:
@@ -202,8 +202,8 @@ models:
         fitted: true
         log_likelihoods:
             convergence: -3453877.6394911087
-            'null': -2953841.007929206
-            ratio: -0.16928352955342518
+            'null': -2914689.78815032
+            ratio: -0.1849897898338475
         name: MWTEMPN
     OTHEMPN:
         fit_parameters:
@@ -246,8 +246,8 @@ models:
         fitted: true
         log_likelihoods:
             convergence: -3453877.6394911087
-            'null': -3043820.127070156
-            ratio: -0.13471805011541726
+            'null': -2985436.729154272
+            ratio: -0.15690867127153574
         name: OTHEMPN
     RETEMPN:
         fit_parameters:
@@ -290,8 +290,8 @@ models:
         fitted: true
         log_likelihoods:
             convergence: -3453877.6394911087
-            'null': -2898891.9275377872
-            ratio: -0.1914475343772839
+            'null': -2859053.844254013
+            ratio: -0.20804917558042613
         name: RETEMPN
 
 fitted: true

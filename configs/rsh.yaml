@@ -24,60 +24,60 @@ fitted: true
 
 fit_parameters:
     Coefficient:
-        I(transit_type == "bart1")[T.True]: -10.553466780237734
-        I(transit_type == "bart2")[T.True]: 27.980925716466224
-        I(transit_type == "bart3a")[T.True]: -2.3436931370380554e-10
-        I(transit_type == "lrt1")[T.True]: -0.341793555144946
-        Intercept: -2558.526828743234
-        ave_income_1500: 361.6668289526952
-        embarcadero: -0.06441863750068545
-        historic: 64.00962585273567
-        is_sanfran: 142.81354960996873
-        jobs_45: -54.276488653938536
-        modern_condo: 30.20271739284721
-        new_construction: 11.005442856705626
-        pacheights: -0.00927191495769133
-        residential_units_1500: 78.93319013309278
-        sfdu: -79.4794981573213
-        sqft_per_unit: -0.07598399407947304
-        stanford: -0.06788784718723585
+        I(transit_type == "bart1")[T.True]: 9.42361047963995
+        I(transit_type == "bart2")[T.True]: 36.56760341762529
+        I(transit_type == "bart3a")[T.True]: 6.439667647980908e-09
+        I(transit_type == "lrt1")[T.True]: -9.65186759408057
+        Intercept: -2785.6658156873145
+        ave_income_1500: 358.5370487031419
+        embarcadero: -0.05016703641060249
+        historic: 75.7310262793126
+        is_sanfran: 131.7313790764349
+        jobs_45: -36.32502962152382
+        modern_condo: 27.717513783039998
+        new_construction: 4.357334678942979
+        pacheights: -0.018470942142804474
+        residential_units_1500: 74.6323418679903
+        sfdu: -75.736205123976
+        sqft_per_unit: -0.07628586863038597
+        stanford: -0.06298419149824505
     Std. Error:
-        I(transit_type == "bart1")[T.True]: 3.429750646002211
-        I(transit_type == "bart2")[T.True]: 3.3933687677595756
-        I(transit_type == "bart3a")[T.True]: 2.989572891658986e-12
-        I(transit_type == "lrt1")[T.True]: 2.9160504988979135
-        Intercept: 24.76284013714127
-        ave_income_1500: 1.7266555757665942
-        embarcadero: 0.0005878445409308069
-        historic: 1.2577864826175558
-        is_sanfran: 2.158125025759293
-        jobs_45: 0.6409211190744539
-        modern_condo: 4.022515879493462
-        new_construction: 1.3622151295806444
-        pacheights: 0.000541249241919084
-        residential_units_1500: 0.9414814723961612
-        sfdu: 0.9116029309099783
-        sqft_per_unit: 0.000665107095228653
-        stanford: 0.0003713616258927015
+        I(transit_type == "bart1")[T.True]: 3.530282833030815
+        I(transit_type == "bart2")[T.True]: 3.4586164217531916
+        I(transit_type == "bart3a")[T.True]: 5.8457328637202e-11
+        I(transit_type == "lrt1")[T.True]: 2.975242191952062
+        Intercept: 25.30454155027303
+        ave_income_1500: 1.74344402542643
+        embarcadero: 0.0005943066266444899
+        historic: 1.275663125820387
+        is_sanfran: 2.324599728202952
+        jobs_45: 0.6142093491512544
+        modern_condo: 4.1024435592038415
+        new_construction: 1.3823186349347731
+        pacheights: 0.0006108822148230397
+        residential_units_1500: 0.9235803564613472
+        sfdu: 0.8916137127346822
+        sqft_per_unit: 0.0006782980660122015
+        stanford: 0.00039180708783370226
     T-Score:
-        I(transit_type == "bart1")[T.True]: -3.0770361666201813
-        I(transit_type == "bart2")[T.True]: 8.24576626693604
-        I(transit_type == "bart3a")[T.True]: -78.39558431831658
-        I(transit_type == "lrt1")[T.True]: -0.11721112349533139
-        Intercept: -103.32121899481767
-        ave_income_1500: 209.46089887795003
-        embarcadero: -109.58447857435822
-        historic: 50.89069308451021
-        is_sanfran: 66.1748267154831
-        jobs_45: -84.68513057007472
-        modern_condo: 7.508414708023603
-        new_construction: 8.079078419936234
-        pacheights: -17.130582806575955
-        residential_units_1500: 83.83934516756894
-        sfdu: -87.18653205511686
-        sqft_per_unit: -114.24324687643119
-        stanford: -182.80792212723367
+        I(transit_type == "bart1")[T.True]: 2.669364162969798
+        I(transit_type == "bart2")[T.True]: 10.572899378962925
+        I(transit_type == "bart3a")[T.True]: 110.16014241681806
+        I(transit_type == "lrt1")[T.True]: -3.2440611457408655
+        Intercept: -110.08560697110349
+        ave_income_1500: 205.6487294540168
+        embarcadero: -84.4127158632745
+        historic: 59.36600717419773
+        is_sanfran: 56.66841369643916
+        jobs_45: -59.14112129963438
+        modern_condo: 6.756342502471653
+        new_construction: 3.1521926774492095
+        pacheights: -30.236503362853895
+        residential_units_1500: 80.80763232550815
+        sfdu: -84.94284468964068
+        sqft_per_unit: -112.46658726137915
+        stanford: -160.75306816546902
 
-fit_rsquared_adj: 0.5147315561099375
+fit_rsquared_adj: 0.4968607780712426
 
-fit_rsquared: 0.5147740184788049
+fit_rsquared: 0.49690480418401006

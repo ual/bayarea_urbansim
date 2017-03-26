@@ -654,7 +654,7 @@ def ual_save_intermediate_tables(households, buildings, parcels, jobs, zones, ye
     This orca step saves intermediate versions of data tables, for developing 
     visualization proofs of concept. 
     """
-    filename = '/project/projectdirs/m1927/urbansim/baus_berkeley_traffic' + str(year) + 'output.h5'
+    filename = '/project/projectdirs/m1927/urbansim/baus_marin_traffic' + str(year) + 'output.h5'
     for table in [households, buildings, parcels, jobs, zones]:
         table.to_frame().to_hdf(filename, table.name)
 

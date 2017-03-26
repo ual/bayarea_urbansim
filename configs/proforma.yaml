@@ -1,0 +1,156 @@
+parcel_sizes:
+- 10000.0
+
+fars:
+- 0.1
+- 0.25
+- 0.5
+- 0.75
+- 1.0
+- 1.5
+- 1.8
+- 2.0
+- 2.25
+- 2.5
+- 2.75
+- 3.0
+- 3.25
+- 3.5
+- 3.75
+- 4.0
+- 4.5
+- 5.0
+- 5.5
+- 6.0
+- 6.5
+- 7.0
+- 9.0
+- 11.0
+
+uses:
+- retail
+- industrial
+- office
+- residential
+
+residential_uses:
+- false
+- false
+- false
+- true
+
+forms:
+    industrial:
+        industrial: 1.0
+    mixedoffice:
+        office: 0.7
+        residential: 0.3
+    mixedresidential:
+        residential: 0.9
+        retail: 0.1
+    office:
+        office: 1.0
+    residential:
+        residential: 1.0
+    retail:
+        retail: 1.0
+
+profit_factor: 1.1
+
+building_efficiency: 0.7
+
+parcel_coverage: 0.8
+
+cap_rate: 0.05
+
+parking_rates:
+    industrial: 0.6
+    office: 1.5
+    residential: 1.0
+    retail: 1.5
+
+sqft_per_rate: 1000.0
+
+parking_configs:
+- surface
+- deck
+- underground
+
+costs:
+    industrial:
+    - 140.0
+    - 175.0
+    - 200.0
+    - 230.0
+    office:
+    - 160.0
+    - 175.0
+    - 200.0
+    - 230.0
+    residential:
+    - 170.0
+    - 190.0
+    - 210.0
+    - 240.0
+    retail:
+    - 160.0
+    - 175.0
+    - 200.0
+    - 230.0
+
+heights_for_costs:
+- 15
+- 55
+- 120
+- .inf
+
+parking_sqft_d:
+    deck: 250.0
+    surface: 300.0
+    underground: 250.0
+
+parking_cost_d:
+    deck: 90
+    surface: 30
+    underground: 110
+
+height_per_story: 12.0
+
+max_retail_height: 2.0
+
+max_industrial_height: 2.0
+
+only_built: True
+
+parcel_filter: nodev != 1 and manual_nodev != 1 and sdem != 1 and oldest_building > 1906 and oldest_building_age > 20  and (total_residential_units != 1 or parcel_acres > 1.0) and first_building_type_id != 5 and first_building_type_id != 6
+
+residential_to_yearly: True
+
+forms_to_test:
+- industrial
+- mixedoffice
+- mixedresidential
+- office
+- residential
+- retail
+
+pass_through:
+- oldest_building
+- total_sqft
+- total_residential_units
+- max_far
+- max_dua
+- land_cost
+- residential
+- min_max_fars
+- max_height
+- building_purchase_price
+- building_purchase_price_sqft
+- residential_sales_price_sqft
+- pda
+- juris
+- superdistrict
+- geom_id
+- vmt_res_cat
+
+simple_zoning: True

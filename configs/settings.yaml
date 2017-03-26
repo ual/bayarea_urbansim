@@ -502,11 +502,11 @@ build_networks:
   #     max_distance: 75
   #     weight_col: "CTIMEV"
   drive_matsim:
-      name: sf_secondary_network_Berkeley_All_roads.h5
+      name: marin_traffic_network_w_seq_nodes.h5
       weight_col: "tt"
       max_distance: 2700
   reg_pois_matsim:
-      name: sf_secondary_network_Berkeley_All_roads.h5
+      name: marin_traffic_network_w_seq_nodes.h5
       weight_col: "tt"
       max_distance: 4500
 

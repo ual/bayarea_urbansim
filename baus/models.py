@@ -16,6 +16,7 @@ import subsidies
 import summaries
 import numpy as np
 import pandas as pd
+import pickle
 
 
 ######## MAX ADDED THESE STEPS TO OVERWRITE URBANSIM_DEFAULTS ##############
@@ -23,6 +24,23 @@ import pandas as pd
 def nrh_simulate(buildings, aggregations):
     return utils.hedonic_simulate("nrh.yaml", buildings, aggregations,
                                   "non_residential_price", cast=True)
+
+
+@orca.step('new_feasibility')
+def new_feasibility(parcels,
+                    parcel_sales_price_sqft_func,
+                    parcel_is_allowed_func):
+
+    utils.run_feasibility(parcels,
+                          parcel_sales_price_sqft_func,
+                          parcel_is_allowed_func,
+                          cfg='proforma.yaml')
+
+    f = subsidies.policy_modifications_of_profit(
+        orca.get_table('feasibility').to_frame(),
+        parcels)
+
+    orca.add_table("feasibility", f)
 
 
 ################
@@ -473,7 +491,6 @@ def office_developer(feasibility, jobs, buildings, parcels, year,
                      limits_settings):
 
     dev_settings = settings['non_residential_developer']
-
     # I'm going to try a new way of computing this because the math the other
     # way is simply too hard.  Basically we used to try and apportion sectors
     # into the demand for office, retail, and industrial, but there's just so
@@ -787,11 +804,10 @@ def neighborhood_vars(net):
 
 @orca.step('regional_vars')
 def regional_vars(net):
-    orca.get_table('buildings').to_frame(['residential_units','tmnode_id']).to_csv('buildings.csv')
     nodes = networks.from_yaml(net["drive_matsim"], "regional_vars_matsim.yaml")
     nodes = nodes.fillna(0)
 
-    nodes2 = pd.read_csv('data/regional_poi_distances_matsim.csv',
+    nodes2 = pd.read_csv('data/regional_poi_distances_marin_traffic.csv',
                          index_col="tmnode_id")
     nodes = pd.concat([nodes, nodes2], axis=1)
 
@@ -823,7 +839,7 @@ def regional_pois(settings, landmarks):
     df = pd.DataFrame(cols)
     print df.describe()
     df.index.name = "tmnode_id"
-    df.to_csv('data/regional_poi_distances_matsim.csv')
+    df.to_csv('data/regional_poi_distances_marin_traffic.csv')
 
 
 @orca.step('price_vars')
