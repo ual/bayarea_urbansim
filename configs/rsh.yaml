@@ -16,7 +16,8 @@ predict_filters: null
 model_expression: price_per_sqft ~ sqft_per_unit + residential_units_1500 + jobs_45
     + sfdu + ave_income_1500 + is_sanfran + embarcadero + pacheights + stanford +
     I(transit_type == "bart1") + I(transit_type == "bart2") + I(transit_type == "bart3a")
-    + I(transit_type == "lrt1") + modern_condo + historic + new_construction
+    + I(transit_type == "lrt1") + modern_condo + historic + new_construction + ave_lot_size_per_unit 
+    + pct_black + pct_hisp + pct_asian + pct_renters + poverty_rate + population 
 
 ytransform: null
 

@@ -24,7 +24,8 @@ estimation_sample_size: 5000
 prediction_sample_size: null
 
 default_config:
-    model_expression: np.log1p(non_residential_price) + office_1500 + industrial_1500
+    model_expression: np.log1p(non_residential_price) + np.log1p(stories) + office_1500 + industrial_1500
+        + ave_sqft_per_unit + ave_lot_size_per_unit + ave_income + ave_hhsize
         + retail_1500 + jobs_45 + residential_units_1500 + residential_units_45 +
         ave_income_1500 + juris_ave_income + embarcadero + stanford
 

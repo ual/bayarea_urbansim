@@ -23,7 +23,9 @@ estimation_sample_size: 6000
 prediction_sample_size: null
 
 default_config:
-    model_expression: jobs_45 + ave_income_1500 + np.log1p(unit_price) + embarcadero
+    model_expression: jobs_45 + ave_income_1500 + np.log1p(unit_price) + np.log1p(ave_lot_size_per_unit) 
+        + ave_income + np.log1p(persons * ave_hhsize) + np.log1p(white * pct_white)
+        + np.log1p(black * pct_black) + np.log1p(hisp * pct_hisp) + np.log1p(asian * pct_asian)embarcadero
         + pacheights + stanford
 
 models:
