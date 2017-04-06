@@ -16,12 +16,133 @@ import subsidies
 import summaries
 import numpy as np
 import pandas as pd
+import pickle
+
+
+######## MAX ADDED THESE STEPS TO OVERWRITE URBANSIM_DEFAULTS ##############
+@orca.step('regional_vars_matsim')
+def regional_vars_matsim(net):
+    nodes = networks.from_yaml(net["drive_congested"], "regional_vars_matsim.yaml")
+    nodes = nodes.fillna(0)
+
+    nodes2 = pd.read_csv('data/regional_poi_distances_matsim.csv',
+                         index_col="tmnode_id")
+    nodes = pd.concat([nodes, nodes2], axis=1)
+
+    print nodes.describe()
+    orca.add_table("tmnodes", nodes)
+
+
+@orca.step('regional_vars_freeflow')
+def regional_vars(net):
+    nodes = networks.from_yaml(net["drive_freeflow"], "regional_vars_freeflow.yaml")
+    nodes = nodes.fillna(0)
+
+    nodes2 = pd.read_csv('data/regional_poi_distances_marin_freeflow.csv',
+                         index_col="tmnode_id")
+    nodes = pd.concat([nodes, nodes2], axis=1)
+
+    print nodes.describe()
+    orca.add_table("tmnodes_ff", nodes)
+
+
+@orca.step('regional_vars_congested')
+def regional_vars(net):
+    nodes = networks.from_yaml(net["drive_congested"], "regional_vars_congested.yaml")
+    nodes = nodes.fillna(0)
+
+    nodes2 = pd.read_csv('data/regional_poi_distances_marin_congested.csv',
+                         index_col="tmnode_id")
+    nodes = pd.concat([nodes, nodes2], axis=1)
+
+    print nodes.describe()
+    orca.add_table("tmnodes_cong", nodes)
+
+
+@orca.step('rsh_estimate_traffic')
+def rsh_estimate(homesales, aggregations):
+    return utils.hedonic_estimate("rsh_traffic.yaml", homesales, aggregations)
+
+
+@orca.step('hlcm_estimate_traffic')
+def hlcm_estimate(households, buildings, aggregations):
+    return utils.lcm_estimate("hlcm_traffic.yaml", households, "building_id",
+                              buildings, aggregations)
+
+
+@orca.step('elcm_estimate_traffic')
+def elcm_estimate(jobs, buildings, aggregations):
+    return utils.lcm_estimate("elcm_traffic.yaml", jobs, "building_id",
+                              buildings, aggregations)
+
+
+@orca.step('nrh_estimate_traffic')
+def nrh_estimate(costar, aggregations):
+    return utils.hedonic_estimate("nrh_traffic.yaml", costar, aggregations)
+
+
+@orca.step('nrh_simulate_traffic')
+def nrh_simulate(buildings, aggregations):
+    return utils.hedonic_simulate("nrh_traffic.yaml", buildings, aggregations,
+                                  "non_residential_price", cast=True)
+
+
+@orca.step('rsh_simulate_traffic')
+def rsh_simulate(buildings, aggregations, settings):
+    utils.hedonic_simulate("rsh_traffic.yaml", buildings, aggregations,
+                           "residential_price", cast=True)
+    if "rsh_simulate" in settings:
+        low = float(settings["rsh_simulate"]["low"])
+        high = float(settings["rsh_simulate"]["high"])
+        buildings.update_col("residential_price",
+                             buildings.residential_price.clip(low, high))
+        print "Clipped rsh_simulate produces\n", \
+            buildings.residential_price.describe()
+
+
+@orca.step('hlcm_simulate_traffic')
+def hlcm_simulate(households, buildings, aggregations, settings, low_income):
+
+    fname = misc.config("hlcm_traffic.yaml")
+
+    print "\nAffordable housing HLCM:\n"
+
+    cfg = yaml.load(open(fname))
+    cfg["choosers_predict_filters"] = "income <= %d" % low_income
+    open(misc.config("hlcm_tmp.yaml"), "w").write(yaml.dump(cfg))
+
+    # low income into affordable units
+    utils.lcm_simulate("hlcm_tmp.yaml", households, buildings,
+                       aggregations,
+                       "building_id", "residential_units",
+                       "vacant_affordable_units",
+                       settings.get("enable_supply_correction", None), cast=True)
+
+    os.remove(misc.config("hlcm_tmp.yaml"))
+
+    print "\nMarket rate housing HLCM:\n"
+
+    # then everyone into market rate units
+    utils.lcm_simulate("hlcm_traffic.yaml", households, buildings,
+                       aggregations,
+                       "building_id", "residential_units",
+                       "vacant_market_rate_units",
+                       settings.get("enable_supply_correction", None), cast=True)
+
+
+@orca.step('elcm_simulate_traffic')
+def elcm_simulate(jobs, buildings, aggregations):
+    return utils.lcm_simulate("elcm_traffic.yaml", jobs, buildings, aggregations,
+                              "building_id", "job_spaces",
+                              "vacant_job_spaces")
+
+################
 
 
 @orca.step('rsh_simulate')
 def rsh_simulate(buildings, aggregations, settings):
     utils.hedonic_simulate("rsh.yaml", buildings, aggregations,
-                           "residential_price")
+                           "residential_price", cast=True)
     if "rsh_simulate" in settings:
         low = float(settings["rsh_simulate"]["low"])
         high = float(settings["rsh_simulate"]["high"])
@@ -47,7 +168,7 @@ def hlcm_simulate(households, buildings, aggregations, settings, low_income):
                        aggregations,
                        "building_id", "residential_units",
                        "vacant_affordable_units",
-                       settings.get("enable_supply_correction", None))
+                       settings.get("enable_supply_correction", None), cast=True)
 
     os.remove(misc.config("hlcm_tmp.yaml"))
 
@@ -58,7 +179,7 @@ def hlcm_simulate(households, buildings, aggregations, settings, low_income):
                        aggregations,
                        "building_id", "residential_units",
                        "vacant_market_rate_units",
-                       settings.get("enable_supply_correction", None))
+                       settings.get("enable_supply_correction", None), cast=True)
 
 
 @orca.step('households_transition')
@@ -79,7 +200,7 @@ def households_transition(households, household_controls, year, settings):
 def households_relocation(households, settings, years_per_iter):
     rate = settings['rates']['households_relocation']
     rate = min(rate * years_per_iter, 1.0)
-    return utils.simple_relocation(households, rate, "building_id")
+    return utils.simple_relocation(households, rate, "building_id", cast=True)
 
 
 @orca.table(cache=True)
@@ -463,7 +584,6 @@ def office_developer(feasibility, jobs, buildings, parcels, year,
                      limits_settings):
 
     dev_settings = settings['non_residential_developer']
-
     # I'm going to try a new way of computing this because the math the other
     # way is simply too hard.  Basically we used to try and apportion sectors
     # into the demand for office, retail, and industrial, but there's just so
@@ -718,7 +838,7 @@ def make_network_from_settings(settings):
 @orca.injectable('net', cache=True)
 def build_networks(settings):
     nets = {}
-    pdna.reserve_num_graphs(len(settings["build_networks"]))
+    pdna.reserve_num_graphs(len(settings["build_networks"]) + 1)
 
     # yeah, starting to hardcode stuff, not great, but can only
     # do nearest queries on the first graph I initialize due to crummy
@@ -793,25 +913,26 @@ def regional_pois(settings, landmarks):
     # because of the aforementioned limit of one netowrk at a time for the
     # POIS, as well as the large amount of memory used, this is now a
     # preprocessing step
-    n = make_network(
-        settings['build_networks']['drive']['name'],
-        "CTIMEV", 75)
+    n = make_network_from_settings(
+        settings['build_networks']['reg_pois_congested'])
 
     n.init_pois(
         num_categories=1,
-        max_dist=75,
+        max_dist=settings['build_networks']['reg_pois_congested']['max_distance'],
         max_pois=1)
 
     cols = {}
     for locname in ["embarcadero", "stanford", "pacheights"]:
         locs = landmarks.local.query("name == '%s'" % locname)
         n.set_pois("tmp", locs.lng, locs.lat)
-        cols[locname] = n.nearest_pois(75, "tmp", num_pois=1)[1]
+        cols[locname + '_cong'] = n.nearest_pois(
+            settings['build_networks']['reg_pois_congested']['max_distance'],
+            "tmp", num_pois=1)[1]
 
     df = pd.DataFrame(cols)
     print df.describe()
     df.index.name = "tmnode_id"
-    df.to_csv('regional_poi_distances.csv')
+    df.to_csv('data/regional_poi_distances_marin_congested.csv')
 
 
 @orca.step('price_vars')

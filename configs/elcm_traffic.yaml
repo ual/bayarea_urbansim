@@ -1,0 +1,340 @@
+name: elcm
+
+model_type: segmented_discretechoice
+
+segmentation_col: empsix
+
+choosers_fit_filters: building_id != -1
+
+choosers_predict_filters: null
+
+alts_fit_filters: null
+
+alts_predict_filters:
+- job_spaces > 0
+
+interaction_predict_filters: null
+
+choice_column: null
+
+sample_size: 50
+
+estimation_sample_size: 5000
+
+prediction_sample_size: null
+
+default_config:
+    model_expression: np.log1p(non_residential_price) + office_1500 + industrial_1500
+        + retail_1500 + retail_1500 + jobs_45_ff/jobs_45_cong + residential_units_1500
+        + residential_units_45_ff/residential_units_45_cong + ave_income_1500 + juris_ave_income
+        + embarcadero_cong + stanford_cong
+
+models:
+    AGREMPN:
+        fit_parameters:
+            Coefficient:
+                ave_income_1500: 0.09159516211179579
+                embarcadero_cong: 0.00047752916603251703
+                industrial_1500: 0.14258360901329012
+                jobs_45_ff: 2.347645277558229
+                jobs_45_ff:jobs_45_cong: -0.025979158657696844
+                juris_ave_income: 1.1427447727997833
+                np.log1p(non_residential_price): 1.4031149566855499
+                office_1500: -0.06006460852201763
+                residential_units_1500: -0.3782548297899743
+                residential_units_45_ff: -3.0
+                residential_units_45_ff:residential_units_45_cong: 0.03905875469768005
+                retail_1500: -0.02015688546000981
+                stanford_cong: 0.00019200855278442684
+            Std. Error:
+                ave_income_1500: 0.00949476178414839
+                embarcadero_cong: 2.414999086815125e-05
+                industrial_1500: 0.007517496305164712
+                jobs_45_ff: 0.29411305336197535
+                jobs_45_ff:jobs_45_cong: 0.014632861033387543
+                juris_ave_income: 0.02934622520817591
+                np.log1p(non_residential_price): 0.01628797599827092
+                office_1500: 0.00968657911746042
+                residential_units_1500: 0.01343970711081651
+                residential_units_45_ff: 0.298696084623698
+                residential_units_45_ff:residential_units_45_cong: 0.015002793550804807
+                retail_1500: 0.010223084475726694
+                stanford_cong: 2.0321795140653184e-05
+            T-Score:
+                ave_income_1500: 9.646915235379042
+                embarcadero_cong: 19.773471908938788
+                industrial_1500: 18.96690110979257
+                jobs_45_ff: 7.982118612970567
+                jobs_45_ff:jobs_45_cong: -1.7753984404294314
+                juris_ave_income: 38.940094158393244
+                np.log1p(non_residential_price): 86.14421809281276
+                office_1500: -6.200807095432579
+                residential_units_1500: -28.144573886252942
+                residential_units_45_ff: -10.043653581128948
+                residential_units_45_ff:residential_units_45_cong: 2.603432125184765
+                retail_1500: -1.9717029148951628
+                stanford_cong: 9.448405096866619
+        fitted: true
+        log_likelihoods:
+            convergence: -7193.888563099111
+            'null': -19560.115027141746
+            ratio: 0.6322164489770729
+        name: AGREMPN
+    FPSEMPN:
+        fit_parameters:
+            Coefficient:
+                ave_income_1500: 0.056536021451543864
+                embarcadero_cong: -1.973316177748034e-05
+                industrial_1500: 0.08973962295414784
+                jobs_45_ff: 0.8249112914957454
+                jobs_45_ff:jobs_45_cong: 0.010382049537483945
+                juris_ave_income: 0.37773286308107706
+                np.log1p(non_residential_price): 1.2250706568970464
+                office_1500: 0.4415672563191749
+                residential_units_1500: -0.3149931311017568
+                residential_units_45_ff: -0.9805212975009658
+                residential_units_45_ff:residential_units_45_cong: 0.006259733592963623
+                retail_1500: -0.04475601627542213
+                stanford_cong: 3.610419315444285e-05
+            Std. Error:
+                ave_income_1500: 0.009501468930418108
+                embarcadero_cong: 2.652363343759736e-05
+                industrial_1500: 0.007421184397744545
+                jobs_45_ff: 0.4078558329084201
+                jobs_45_ff:jobs_45_cong: 0.01216192020223092
+                juris_ave_income: 0.05164137457779835
+                np.log1p(non_residential_price): 0.014747047611070629
+                office_1500: 0.010686626627290795
+                residential_units_1500: 0.013213832074206752
+                residential_units_45_ff: 0.40807109186988594
+                residential_units_45_ff:residential_units_45_cong: 0.011130668656445556
+                retail_1500: 0.01142594058799117
+                stanford_cong: 2.096387507845043e-05
+            T-Score:
+                ave_income_1500: 5.950240101354098
+                embarcadero_cong: -0.7439841085086216
+                industrial_1500: 12.092358597290968
+                jobs_45_ff: 2.022556072358467
+                jobs_45_ff:jobs_45_cong: 0.853652167161853
+                juris_ave_income: 7.3145392850071795
+                np.log1p(non_residential_price): 83.07226566335788
+                office_1500: 41.3196111101636
+                residential_units_1500: -23.838136381089615
+                residential_units_45_ff: -2.402819795462518
+                residential_units_45_ff:residential_units_45_cong: 0.5623861230779457
+                retail_1500: -3.9170531240518924
+                stanford_cong: 1.722209897709023
+        fitted: true
+        log_likelihoods:
+            convergence: -8347.029566658395
+            'null': -19560.115027141746
+            ratio: 0.5732627566312365
+        name: FPSEMPN
+    HEREMPN:
+        fit_parameters:
+            Coefficient:
+                ave_income_1500: 0.03511077440436423
+                embarcadero_cong: -0.00012083041721566418
+                industrial_1500: -0.023959927446116216
+                jobs_45_ff: 0.6268415603386074
+                jobs_45_ff:jobs_45_cong: -0.020484759819662454
+                juris_ave_income: 0.016156541830994506
+                np.log1p(non_residential_price): 1.2836479888553909
+                office_1500: 0.3128635209449693
+                residential_units_1500: -0.2243516301644165
+                residential_units_45_ff: -0.7282245491938266
+                residential_units_45_ff:residential_units_45_cong: 0.027193244346756816
+                retail_1500: 0.06965884646767327
+                stanford_cong: 3.91860445570607e-06
+            Std. Error:
+                ave_income_1500: 0.011359907319678442
+                embarcadero_cong: 2.554116581628393e-05
+                industrial_1500: 0.007089119791577942
+                jobs_45_ff: 0.39345446880667356
+                jobs_45_ff:jobs_45_cong: 0.013853610954128076
+                juris_ave_income: 0.04513129304434729
+                np.log1p(non_residential_price): 0.013324326735330773
+                office_1500: 0.010526410606210027
+                residential_units_1500: 0.014084317593833518
+                residential_units_45_ff: 0.39708927448841635
+                residential_units_45_ff:residential_units_45_cong: 0.013309685890024481
+                retail_1500: 0.011123870372638128
+                stanford_cong: 1.96241936954628e-05
+            T-Score:
+                ave_income_1500: 3.090762399402928
+                embarcadero_cong: -4.7308105700730385
+                industrial_1500: -3.3798169801815496
+                jobs_45_ff: 1.5931743315555278
+                jobs_45_ff:jobs_45_cong: -1.4786585163602013
+                juris_ave_income: 0.35798978361020206
+                np.log1p(non_residential_price): 96.33867544329058
+                office_1500: 29.72176676828437
+                residential_units_1500: -15.929180002490394
+                residential_units_45_ff: -1.833906368113375
+                residential_units_45_ff:residential_units_45_cong: 2.0431169128595266
+                retail_1500: 6.262105196678324
+                stanford_cong: 0.19968231645675558
+        fitted: true
+        log_likelihoods:
+            convergence: -9549.87936600141
+            'null': -19560.115027141746
+            ratio: 0.5117677297526148
+        name: HEREMPN
+    MWTEMPN:
+        fit_parameters:
+            Coefficient:
+                ave_income_1500: 0.025397411421313937
+                embarcadero_cong: 0.00018576063305377274
+                industrial_1500: 0.36462536009732155
+                jobs_45_ff: 0.923476215441251
+                jobs_45_ff:jobs_45_cong: 0.022112592623490083
+                juris_ave_income: -0.2666561529306012
+                np.log1p(non_residential_price): 1.398292681187744
+                office_1500: 0.11236434222869571
+                residential_units_1500: -0.32598897413257955
+                residential_units_45_ff: -1.1618433386823834
+                residential_units_45_ff:residential_units_45_cong: 0.002849982481865765
+                retail_1500: -0.17691351031468974
+                stanford_cong: 3.379767287150368e-05
+            Std. Error:
+                ave_income_1500: 0.007638753312564533
+                embarcadero_cong: 2.9156346397869536e-05
+                industrial_1500: 0.008086635431570136
+                jobs_45_ff: 0.4817952178217696
+                jobs_45_ff:jobs_45_cong: 0.016383075223580696
+                juris_ave_income: 0.05157451003984405
+                np.log1p(non_residential_price): 0.019291169597156054
+                office_1500: 0.010452220449778095
+                residential_units_1500: 0.011758032580580969
+                residential_units_45_ff: 0.4719061135129658
+                residential_units_45_ff:residential_units_45_cong: 0.015286750282946154
+                retail_1500: 0.010870991131848669
+                stanford_cong: 2.240267642626124e-05
+            T-Score:
+                ave_income_1500: 3.324811049931307
+                embarcadero_cong: 6.371190358314111
+                industrial_1500: 45.089872442354476
+                jobs_45_ff: 1.9167401030179432
+                jobs_45_ff:jobs_45_cong: 1.3497217293895292
+                juris_ave_income: -5.170308990324777
+                np.log1p(non_residential_price): 72.48356167030346
+                office_1500: 10.750284379151346
+                residential_units_1500: -27.72478915145788
+                residential_units_45_ff: -2.462022223093029
+                residential_units_45_ff:residential_units_45_cong: 0.18643481636808026
+                retail_1500: -16.273908070478267
+                stanford_cong: 1.5086444239262773
+        fitted: true
+        log_likelihoods:
+            convergence: -6687.167601336978
+            'null': -19560.115027141746
+            ratio: 0.6581222762720046
+        name: MWTEMPN
+    OTHEMPN:
+        fit_parameters:
+            Coefficient:
+                ave_income_1500: 0.004989670532933899
+                embarcadero_cong: 0.00016069978826616817
+                industrial_1500: 0.14607189265070136
+                jobs_45_ff: -0.32065718543884736
+                jobs_45_ff:jobs_45_cong: -0.0011451822085095317
+                juris_ave_income: 0.012692376108196072
+                np.log1p(non_residential_price): 1.271909765279777
+                office_1500: 0.32917843279472536
+                residential_units_1500: -0.2450976853275562
+                residential_units_45_ff: 0.14969733026665163
+                residential_units_45_ff:residential_units_45_cong: 0.026233320585957568
+                retail_1500: -0.04198802883989927
+                stanford_cong: 0.00010734843803226205
+            Std. Error:
+                ave_income_1500: 0.008817876815185807
+                embarcadero_cong: 2.6144514369850087e-05
+                industrial_1500: 0.007080613250590554
+                jobs_45_ff: 0.3762045385327279
+                jobs_45_ff:jobs_45_cong: 0.013278406471219858
+                juris_ave_income: 0.04825944999074092
+                np.log1p(non_residential_price): 0.014356727174171371
+                office_1500: 0.010444501411596517
+                residential_units_1500: 0.012477663553430201
+                residential_units_45_ff: 0.37648883129600325
+                residential_units_45_ff:residential_units_45_cong: 0.012294774817674957
+                retail_1500: 0.011108612821365226
+                stanford_cong: 2.0927387689131684e-05
+            T-Score:
+                ave_income_1500: 0.5658584983111673
+                embarcadero_cong: 6.146596796285784
+                industrial_1500: 20.629836354713813
+                jobs_45_ff: -0.8523479984836807
+                jobs_45_ff:jobs_45_cong: -0.0862439488497091
+                juris_ave_income: 0.26300291674752274
+                np.log1p(non_residential_price): 88.59329496544451
+                office_1500: 31.516912088234193
+                residential_units_1500: -19.642915060021558
+                residential_units_45_ff: 0.39761426587700427
+                residential_units_45_ff:residential_units_45_cong: 2.1336967105932327
+                retail_1500: -3.779772462601593
+                stanford_cong: 5.129567035641616
+        fitted: true
+        log_likelihoods:
+            convergence: -8940.197345267597
+            'null': -19560.115027141746
+            ratio: 0.5429373839130229
+        name: OTHEMPN
+    RETEMPN:
+        fit_parameters:
+            Coefficient:
+                ave_income_1500: 0.05271052630613582
+                embarcadero_cong: 8.646179961990731e-05
+                industrial_1500: 0.03987827626646603
+                jobs_45_ff: 0.24149531921541909
+                jobs_45_ff:jobs_45_cong: 0.008944967766138671
+                juris_ave_income: 0.1124756552901946
+                np.log1p(non_residential_price): 1.3451276526775675
+                office_1500: 0.02552369594641005
+                residential_units_1500: -0.3125512138592685
+                residential_units_45_ff: -0.19548389906588218
+                residential_units_45_ff:residential_units_45_cong: 0.003566068029042128
+                retail_1500: 0.29309547717298573
+                stanford_cong: 0.0001344904602706208
+            Std. Error:
+                ave_income_1500: 0.010254135212780117
+                embarcadero_cong: 2.530729763697922e-05
+                industrial_1500: 0.00672585020602581
+                jobs_45_ff: 0.406431091527365
+                jobs_45_ff:jobs_45_cong: 0.012914946654646237
+                juris_ave_income: 0.047743664905418315
+                np.log1p(non_residential_price): 0.014060784189789245
+                office_1500: 0.010032139058044365
+                residential_units_1500: 0.0126335001520393
+                residential_units_45_ff: 0.41148089367165447
+                residential_units_45_ff:residential_units_45_cong: 0.012515197610634228
+                retail_1500: 0.010820480096044088
+                stanford_cong: 1.950171988097312e-05
+            T-Score:
+                ave_income_1500: 5.140416545360226
+                embarcadero_cong: 3.416476972775183
+                industrial_1500: 5.929105621581991
+                jobs_45_ff: 0.5941851503237153
+                jobs_45_ff:jobs_45_cong: 0.6926058624423865
+                juris_ave_income: 2.355823657714848
+                np.log1p(non_residential_price): 95.66519438185968
+                office_1500: 2.5441927986378574
+                residential_units_1500: -24.739874943430973
+                residential_units_45_ff: -0.47507406072144537
+                residential_units_45_ff:residential_units_45_cong: 0.2849390109519343
+                retail_1500: 27.087104691421217
+                stanford_cong: 6.896338430224127
+        fitted: true
+        log_likelihoods:
+            convergence: -9363.683704539444
+            'null': -19560.115027141746
+            ratio: 0.5212868793692504
+        name: RETEMPN
+
+fitted: true
+
+choice_mode: aggregate
+
+remove_alts: true
+
+probability_mode: single_chooser

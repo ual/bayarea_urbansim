@@ -11,7 +11,6 @@ import warnings
 from baus.utils import compare_summary
 
 warnings.filterwarnings("ignore")
-
 args = sys.argv[1:]
 
 # Suppress scientific notation in pandas output
@@ -21,13 +20,13 @@ SLACK = MAPS = "URBANSIM_SLACK" in os.environ
 LOGS = True
 INTERACT = False
 SCENARIO = None
-MODE = "ual_simulation"
+MODE = "simulation"
 S3 = False
 EVERY_NTH_YEAR = 5
 CURRENT_COMMIT = os.popen('git rev-parse HEAD').read()
 COMPARE_TO_NO_PROJECT = True
 NO_PROJECT = 611
-IN_YEAR, OUT_YEAR = 2010, 2011
+IN_YEAR, OUT_YEAR = 2010, 2040
 
 LAST_KNOWN_GOOD_RUNS = {
     "0": 1057,
@@ -71,10 +70,10 @@ def get_simulation_models(SCENARIO):
 
     models = [
         "neighborhood_vars",            # local accessibility vars
-        "regional_vars",                # regional accessibility vars
-
-        "rsh_simulate",                 # residential sales hedonic
-        "nrh_simulate",                 # non-residential rent hedonic
+        "regional_vars_congested",                # regional accessibility vars
+        "regional_vars_freeflow",
+        "rsh_simulate_traffic",                 # residential sales hedonic
+        "nrh_simulate_traffic",                 # non-residential rent hedonic
 
         "households_relocation",
         "households_transition",
@@ -96,8 +95,10 @@ def get_simulation_models(SCENARIO):
         "retail_developer",
         "office_developer",
 
-        "hlcm_simulate",                 # put these last so they don't get
-        "elcm_simulate",                 # displaced by new dev
+        "hlcm_simulate_traffic",                 # put these last so they don't get
+        "elcm_simulate_traffic",                 # displaced by new dev
+
+        "ual_save_intermediate_tables",       # saves output for visualization
 
         "topsheet",
         "parcel_summary",
@@ -139,91 +140,99 @@ def run_models(MODE, SCENARIO):
         models = get_simulation_models(SCENARIO)
         orca.run(models, iter_vars=years_to_run)
 
+    elif MODE == "update_pois":
+        orca.run([
+            "regional_pois"
+            ])
+
     elif MODE == "ual_simulation":
 
         years_to_run = range(IN_YEAR, OUT_YEAR+1, EVERY_NTH_YEAR)
-        models = get_simulation_models(SCENARIO)
 
         # Initialization steps
         orca.run([
             "ual_initialize_residential_units",
             "ual_match_households_to_units",
             "ual_assign_tenure_to_units",
-#           "ual_load_rental_listings",     # required to estimate rental hedonic
+            "ual_load_rental_listings",     # required to estimate rental hedonic
         ])
 
         # Estimation steps
         orca.run([
-#           "neighborhood_vars",             # street network accessibility
-#           "regional_vars",                 # road network accessibility
-#             
-#           "ual_rrh_estimate",              # estimate residential rental hedonic
-# 
-#           "ual_hlcm_owner_estimate",       # estimate location choice for owners
-#           "ual_hlcm_renter_estimate",      # estimate location choice for renters
+            "neighborhood_vars",             # street network accessibility
+            "regional_vars",                 # road network accessibility
+            "rsh_estimate",              # residential sales hedonic
+            # "nrh_estimate",              # non-res rent hedonic (CAN'T RUN THIS WITHOUT COSTAR DATA)
+            
+            "ual_rrh_estimate",              # estimate residential rental hedonic
+            "ual_hlcm_owner_estimate",       # estimate location choice for owners
+            "ual_hlcm_renter_estimate",      # estimate location choice for renters
+            "elcm_estimate",             # employment lcm
 
-        ])
+        ], iter_vars=[2010])
 
         # Simulation steps
-        orca.run([
+        # orca.run([
 
-            "neighborhood_vars",                # street network accessibility
-            "regional_vars",                    # road network accessibility
+        #     "neighborhood_vars",                # street network accessibility
+        #     "regional_vars",                    # road network accessibility
             
-            "ual_rsh_simulate",                 # residential sales hedonic for units
-            "ual_rrh_simulate",                 # residential rental hedonic for units
-            "nrh_simulate",                     # non-residential rent hedonic
+        #     "ual_rsh_simulate",                 # residential sales hedonic for units
+        #     "ual_rrh_simulate",                 # residential rental hedonic for units
+        #     "nrh_simulate",                     # non-residential rent hedonic
             
-            "ual_assign_tenure_to_new_units",   # (based on higher of predicted price or rent)
+        #     "ual_assign_tenure_to_new_units",   # (based on higher of predicted price or rent)
  
-            "ual_households_relocation",        # uses conditional probabilities
-            "households_transition",
-            "ual_reconcile_unplaced_households",  # update building/unit/hh correspondence
+        #     "ual_households_relocation",        # uses conditional probabilities
+        #     "households_transition",
+        #     "ual_reconcile_unplaced_households",  # update building/unit/hh correspondence
 
-            "ual_hlcm_owner_simulate",          # allocate owners to vacant owner-occupied units
-            "ual_hlcm_renter_simulate",         # allocate renters to vacant rental units
-            "ual_reconcile_placed_households",  # update building/unit/hh correspondence
+        #     "ual_hlcm_owner_simulate",          # allocate owners to vacant owner-occupied units
+        #     "ual_hlcm_renter_simulate",         # allocate renters to vacant rental units
+        #     "ual_reconcile_placed_households",  # update building/unit/hh correspondence
 
-            "jobs_relocation",
-            "jobs_transition",
-            "elcm_simulate",
+        #     "jobs_relocation",
+        #     "jobs_transition",
+        #     "elcm_simulate",
 
-            "ual_update_building_residential_price",  # apply unit prices to buildings          
-            "price_vars",
-            "scheduled_development_events",
-            "alt_feasibility",
+        #     "ual_update_building_residential_price",  # apply unit prices to buildings          
+        #     "price_vars",
+        #     "scheduled_development_events",
+        #     "alt_feasibility",
             
-            "residential_developer",
-            "developer_reprocess",
-            "retail_developer",
-            "office_developer",
+        #     "residential_developer",
+        #     "developer_reprocess",
+        #     "retail_developer",
+        #     "office_developer",
             
-            "ual_remove_old_units",               # (for buildings that were removed)
-            "ual_initialize_new_units",           # set up units for new residential buildings
-            "ual_reconcile_unplaced_households",  # update building/unit/hh correspondence
+        #     "ual_remove_old_units",               # (for buildings that were removed)
+        #     "ual_initialize_new_units",           # set up units for new residential buildings
+        #     "ual_reconcile_unplaced_households",  # update building/unit/hh correspondence
 
-#             "ual_save_intermediate_tables",       # saves output for visualization
+        #     "ual_save_intermediate_tables",       # saves output for visualization
             
-            "topsheet",
-            "diagnostic_output",
-            "geographic_summary",
-            "travel_model_output"
+        #     "topsheet",
+        #     "diagnostic_output",
+        #     "geographic_summary",
+        #     "travel_model_output"
 
-        ], iter_vars=years_to_run)
+        # ], iter_vars=years_to_run)
 
     elif MODE == "estimation":
 
         orca.run([
 
             "neighborhood_vars",         # local accessibility variables
-            "regional_vars",             # regional accessibility variables
-            "rsh_estimate",              # residential sales hedonic
-            "nrh_estimate",              # non-res rent hedonic
-            "rsh_simulate",
-            "nrh_simulate",
-            "hlcm_estimate",             # household lcm
-            "elcm_estimate",             # employment lcm
-
+            # "regional_vars",
+            # "regional_vars_matsim",
+            "regional_vars_congested",   # regional accessibility variables
+            "regional_vars_freeflow",
+            "rsh_estimate_traffic",              # residential sales hedonic
+            "nrh_estimate_traffic",              # non-res rent hedonic (CAN'T RUN WITHOUT COSTAR DATA)
+            "rsh_simulate_traffic",
+            "nrh_simulate_traffic",
+            "hlcm_estimate_traffic",             # household lcm
+            "elcm_estimate_traffic"             # employment lcm
         ], iter_vars=[2010])
 
     elif MODE == "baseyearsim":
@@ -328,23 +337,23 @@ if SLACK:
         'http://urbanforecast.com/runs/run%d_topsheet_2040.log' % run_num,
         as_user=True)
 
-if MODE == "simulation":
-    # compute and write the difference report at the superdistrict level
-    prev_run = LAST_KNOWN_GOOD_RUNS[SCENARIO]
-    # fetch the previous run off of the internet for comparison - the "last
-    # known good run" should always be available on EC2
-    df1 = pd.read_csv("http://urbanforecast.com/runs/run%d_superdistrict_summaries_2040.csv" % prev_run)
-    df1 = df1.set_index(df1.columns[0]).sort_index()
+# if MODE == "simulation":
+#     # compute and write the difference report at the superdistrict level
+#     prev_run = LAST_KNOWN_GOOD_RUNS[SCENARIO]
+#     # fetch the previous run off of the internet for comparison - the "last
+#     # known good run" should always be available on EC2
+#     df1 = pd.read_csv("http://urbanforecast.com/runs/run%d_superdistrict_summaries_2040.csv" % prev_run)
+#     df1 = df1.set_index(df1.columns[0]).sort_index()
 
-    df2 = pd.read_csv("runs/run%d_superdistrict_summaries_2040.csv" % run_num)
-    df2 = df2.set_index(df2.columns[0]).sort_index()
+#     df2 = pd.read_csv("runs/run%d_superdistrict_summaries_2040.csv" % run_num)
+#     df2 = df2.set_index(df2.columns[0]).sort_index()
 
-    supnames = \
-        pd.read_csv("data/superdistricts.csv", index_col="number").name
+#     supnames = \
+#         pd.read_csv("data/superdistricts.csv", index_col="number").name
 
-    summary = compare_summary(df1, df2, supnames)
-    with open("runs/run%d_difference_report.log" % run_num, "w") as f:
-        f.write(summary)
+#     summary = compare_summary(df1, df2, supnames)
+#     with open("runs/run%d_difference_report.log" % run_num, "w") as f:
+#         f.write(summary)
 
 if SLACK and MODE == "simulation":
 

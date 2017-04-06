@@ -244,10 +244,10 @@ def homesales(store):
 # non-residential rent data
 @orca.table('costar', cache=True)
 def costar(store, parcels):
-    df = pd.read_csv(os.path.join(misc.data_dir(), '2015_08_29_costar.csv'))
+    df = pd.read_csv(os.path.join(misc.data_dir(), 'costar_allbayarea.csv'))
     df["PropertyType"] = df.PropertyType.replace("General Retail", "Retail")
     df = df[df.PropertyType.isin(["Office", "Retail", "Industrial"])]
-    df["costar_rent"] = df["Average Weighted Rent"].astype('float')
+    df["costar_rent"] = pd.to_numeric(df["Average Weighted Rent"], errors='coerce')
     df["year_built"] = df["Year Built"].fillna(1980)
     df = df.dropna(subset=["costar_rent", "Latitude", "Longitude"])
 
@@ -660,15 +660,51 @@ def zones(store):
     return df
 
 
+#######################
+# EXTRA PUMS VARIABLES
+#######################
+
+@orca.table('household_extras', cache=True)
+def household_extras():
+    df = pd.read_csv(os.path.join(misc.data_dir(), "household_extras.csv"))
+    df = df.set_index('serialno')
+    return df
+
+
+@orca.column('households', 'white')
+def white(households, household_extras):
+    return misc.reindex(household_extras.white, households.serialno).fillna(0)
+
+
+@orca.column('households', 'black')
+def black(households, household_extras):
+    return misc.reindex(household_extras.black, households.serialno).fillna(0)
+
+
+@orca.column('households', 'asian')
+def asian(households, household_extras):
+    return misc.reindex(household_extras.asian, households.serialno).fillna(0)
+
+
+@orca.column('households', 'hisp')
+def hisp(households, household_extras):
+    return misc.reindex(household_extras.hisp, households.serialno).fillna(0)
+
+
 # this specifies the relationships between tables
-orca.broadcast('parcels_geography', 'buildings', cast_index=True,
-               onto_on='parcel_id')
-orca.broadcast('tmnodes', 'buildings', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('parcels_geography', 'buildings', cast_index=True, onto_on='parcel_id')
+# orca.broadcast('tmnodes', 'buildings', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('tmnodes_ff', 'buildings', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('tmnodes_cong', 'buildings', cast_index=True, onto_on='tmnode_id')
 orca.broadcast('parcels', 'homesales', cast_index=True, onto_on='parcel_id')
 orca.broadcast('nodes', 'homesales', cast_index=True, onto_on='node_id')
-orca.broadcast('tmnodes', 'homesales', cast_index=True, onto_on='tmnode_id')
+# orca.broadcast('tmnodes', 'homesales', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('tmnodes_ff', 'homesales', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('tmnodes_cong', 'homesales', cast_index=True, onto_on='tmnode_id')
 orca.broadcast('nodes', 'costar', cast_index=True, onto_on='node_id')
-orca.broadcast('tmnodes', 'costar', cast_index=True, onto_on='tmnode_id')
+# orca.broadcast('tmnodes', 'costar', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('tmnodes_ff', 'costar', cast_index=True, onto_on='tmnode_id')
+orca.broadcast('tmnodes_cong', 'costar', cast_index=True, onto_on='tmnode_id')
 orca.broadcast('logsums', 'homesales', cast_index=True, onto_on='zone_id')
 orca.broadcast('logsums', 'costar', cast_index=True, onto_on='zone_id')
 orca.broadcast('taz_geography', 'parcels', cast_index=True,
