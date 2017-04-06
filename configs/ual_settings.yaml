@@ -3,7 +3,8 @@
 
 unit_aggregation_tables:
   - nodes
-  - tmnodes
+  - tmnodes_cong
+  - tmnodes_ff
   - logsums
   - buildings
 

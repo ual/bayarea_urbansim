@@ -171,9 +171,9 @@ def naics(jobs):
     return jobs.sector_id
 
 
-# @orca.column('jobs', 'empsix', cache=True)
-# def empsix(jobs, settings):
-#    return jobs.naics.map(settings['naics_to_empsix'])
+@orca.column('jobs', 'empsix', cache=True)
+def empsix(jobs, settings):
+   return jobs.naics.map(settings['naics_to_empsix'])
 
 
 @orca.column('jobs', 'empsix_id', cache=True)
@@ -1019,10 +1019,26 @@ def node_id(parcels, net):
 
 @orca.column('parcels', 'tmnode_id', cache=True)
 def node_id(parcels, net):
-    s = net["drive_matsim"].get_node_ids(parcels.x, parcels.y)
+    s = net["drive_congested"].get_node_ids(parcels.x, parcels.y)
     fill_val = s.value_counts().index[0]
     s = s.reindex(parcels.index).fillna(fill_val).astype('int')
     return s
+
+
+# @orca.column('parcels', 'tmnode_id_ff', cache=True)
+# def node_id(parcels, net):
+#     s = net["drive_freeflow"].get_node_ids(parcels.x, parcels.y)
+#     fill_val = s.value_counts().index[0]
+#     s = s.reindex(parcels.index).fillna(fill_val).astype('int')
+#     return s
+
+
+# @orca.column('parcels', 'tmnode_id_cong', cache=True)
+# def node_id(parcels, net):
+#     s = net["drive_congested"].get_node_ids(parcels.x, parcels.y)
+#     fill_val = s.value_counts().index[0]
+#     s = s.reindex(parcels.index).fillna(fill_val).astype('int')
+#     return s
 
 
 @orca.column('parcels', 'subregion', cache=True)
@@ -1279,3 +1295,71 @@ def non_res_categories(parcels_zoning_calculations):
     s = pzc.office_high + pzc.office_medium + \
         pzc.office_low + pzc.cat_r + pzc.cat_ind
     return s
+
+#################### EXTRA STUFF FROM UAL ###########################
+
+@orca.column('nodes', 'poverty_rate', cache=True)
+def poverty_rate(nodes):
+    return nodes.poor.divide(nodes.population).fillna(0)
+
+@orca.column('nodes', 'pct_black', cache=True)
+def pct_black(nodes):
+    return nodes.blacks.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_hisp', cache=True)
+def pct_hisp(nodes):
+    return nodes.hispanics.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_asian', cache=True)
+def pct_asian(nodes):
+    return nodes.asians.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_white', cache=True)
+def pct_white(nodes):
+    return nodes.whites.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_nonwhite', cache=True)
+def pct_nonwhite(nodes):
+    return nodes.nonwhites.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_renters', cache=True)
+def pct_renters(nodes):
+    return nodes.renters.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_singles', cache=True)
+def pct_singles(nodes):
+    return nodes.singles.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_two_persons', cache=True)
+def pct_two_persons(nodes):
+    return nodes.two_persons.divide(nodes.population).fillna(0)*100
+
+@orca.column('nodes', 'pct_three_plus', cache=True)
+def pct_three_plus(nodes):
+    return nodes.three_plus.divide(nodes.population).fillna(0)*100
+
+@orca.column('households', 'hhs1')
+def hhs1(households):
+    hhs1 = households.persons == 1
+    return hhs1.fillna(1)
+
+@orca.column('households', 'hhs2')
+def hhs2(households):
+    hhs2 = households.persons == 2
+    return hhs2.fillna(1)
+
+@orca.column('households', 'hhs3p')
+def hhs3p(households):
+    hhs3p = households.persons > 2
+    return hhs3p.fillna(1)
+
+@orca.column('households', 'hhsize_cat')
+def hhsize_cat(households):
+    hhs = households.persons
+    hhs[hhs > 3] = 3
+    return hhs.fillna(1)
+
+@orca.column('households', 'hhsize_incq')
+def hhsize_incq(households):
+    hhsq = households.hhsize_cat*10+households.income_quartile
+    return hhsq.fillna(1)

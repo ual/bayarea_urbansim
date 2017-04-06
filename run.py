@@ -11,7 +11,6 @@ import warnings
 from baus.utils import compare_summary
 
 warnings.filterwarnings("ignore")
-
 args = sys.argv[1:]
 
 # Suppress scientific notation in pandas output
@@ -71,10 +70,10 @@ def get_simulation_models(SCENARIO):
 
     models = [
         "neighborhood_vars",            # local accessibility vars
-        "regional_vars",                # regional accessibility vars
-
-        "rsh_simulate",                 # residential sales hedonic
-        "nrh_simulate",                 # non-residential rent hedonic
+        "regional_vars_congested",                # regional accessibility vars
+        "regional_vars_freeflow",
+        "rsh_simulate_traffic",                 # residential sales hedonic
+        "nrh_simulate_traffic",                 # non-residential rent hedonic
 
         "households_relocation",
         "households_transition",
@@ -96,8 +95,8 @@ def get_simulation_models(SCENARIO):
         "retail_developer",
         "office_developer",
 
-        "hlcm_simulate",                 # put these last so they don't get
-        "elcm_simulate",                 # displaced by new dev
+        "hlcm_simulate_traffic",                 # put these last so they don't get
+        "elcm_simulate_traffic",                 # displaced by new dev
 
         "ual_save_intermediate_tables",       # saves output for visualization
 
@@ -224,13 +223,16 @@ def run_models(MODE, SCENARIO):
         orca.run([
 
             "neighborhood_vars",         # local accessibility variables
-            "regional_vars",             # regional accessibility variables
-            "rsh_estimate",              # residential sales hedonic
-            # "nrh_estimate",              # non-res rent hedonic (CAN'T RUN WITHOUT COSTAR DATA)
-            "rsh_simulate",
-            "nrh_simulate",
-            "hlcm_estimate",             # household lcm
-            "elcm_estimate",             # employment lcm
+            # "regional_vars",
+            # "regional_vars_matsim",
+            "regional_vars_congested",   # regional accessibility variables
+            "regional_vars_freeflow",
+            "rsh_estimate_traffic",              # residential sales hedonic
+            "nrh_estimate_traffic",              # non-res rent hedonic (CAN'T RUN WITHOUT COSTAR DATA)
+            "rsh_simulate_traffic",
+            "nrh_simulate_traffic",
+            "hlcm_estimate_traffic",             # household lcm
+            "elcm_estimate_traffic"             # employment lcm
         ], iter_vars=[2010])
 
     elif MODE == "baseyearsim":
