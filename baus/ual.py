@@ -705,7 +705,8 @@ def ual_rsh_simulate(residential_units, unit_aggregations, settings):
     utils.hedonic_simulate(cfg = 'rsh.yaml', 
                            tbl = residential_units, 
                            join_tbls = unit_aggregations, 
-                           out_fname = 'unit_residential_price')
+                           out_fname = 'unit_residential_price',
+                           cast=True)
     
     _mtc_clip(residential_units, 'unit_residential_price', settings)
     return
@@ -723,7 +724,8 @@ def ual_rrh_simulate(residential_units, unit_aggregations, settings):
     utils.hedonic_simulate(cfg = 'ual_rrh.yaml', 
                            tbl = residential_units,
                            join_tbls = unit_aggregations, 
-                           out_fname = 'unit_residential_rent')
+                           out_fname = 'unit_residential_rent',
+                           cast=True)
 
     _mtc_clip(residential_units, 'unit_residential_rent', settings, price_scale=0.05/12)
     return

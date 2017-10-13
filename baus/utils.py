@@ -98,7 +98,7 @@ def simple_ipf(seed_matrix, col_marginals, row_marginals, tolerance=1, cnt=0):
 
     # first normalize on columns
     ratios = col_marginals / seed_matrix.sum(axis=0)
-    seed_matrix *= ratios
+    seed_matrix *= ratios.values
     closeness = np.absolute(row_marginals - seed_matrix.sum(axis=1)).sum()
     assert np.absolute(col_marginals - seed_matrix.sum(axis=0)).sum() < .01
     # print "row closeness", closeness

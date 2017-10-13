@@ -160,7 +160,7 @@ def inclusionary_housing_revenue_reduction(feasibility, units):
 
     s = num_affordable_units.groupby(parcels_geography.juris_name).sum()
     print "Feasibile affordable units by jurisdiction"
-    print s[s > 0].order()
+    print s[s > 0].sort_values()
 
     return revenue_reduction, num_affordable_units
 

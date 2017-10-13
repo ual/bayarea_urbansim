@@ -31,6 +31,12 @@ def rsh_simulate(buildings, aggregations, settings):
             buildings.residential_price.describe()
 
 
+@orca.step('nrh_simulate')
+def nrh_simulate(buildings, aggregations):
+    return utils.hedonic_simulate("nrh.yaml", buildings, aggregations,
+                                  "non_residential_price", cast=True)
+
+
 @orca.step('hlcm_simulate')
 def hlcm_simulate(households, buildings, aggregations, settings, low_income):
 

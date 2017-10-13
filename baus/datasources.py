@@ -400,7 +400,7 @@ def reprocess_dev_projects(df):
     # record, we change the later ones to add records - we don't want to
     # constantly be redeveloping projects, but it's a common error for users
     # to make in their development project configuration
-    df = df.sort(["geom_id", "year_built"])
+    df = df.sort_values(["geom_id", "year_built"])
     prev_geom_id = None
     for index, rec in df.iterrows():
         if rec.geom_id == prev_geom_id:
