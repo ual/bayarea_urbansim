@@ -3,14 +3,10 @@ Fall 2017 Work
 ## Merging Long-term Choice Models from ActivitySim
 ### Notes:
 
-- need own mode_choice config for workplace location choice
-- instead of asim logger, baus just redirects stdout to logfile and issues print commands
-- Most Asim functions placed into `asim_*`-prefixed .py files in the baus directory
-    - see below
-- Most Asim configs placed into the configs directory w/o renaming
-    - see below for list of config files
-- skims are loaded from omx objects, we prob want to change this
-- some “placeholder” columns were note included for persons/hh’s tables b/c they reference models that we’re not yet running
+- Workplace_location_choice need own mode_choice config
+- Instead of the logger used throughought the Asim code, UrbanSim just redirects stdout to a logfile and issues print commands. I've converted all `logging` commands in Activitysim to `print()` statements. This was probably not the right thing to do, as the Asim code is more verbose than UrbanSim.
+- Skims are loaded from omx objects, we prob want to change this
+- Some “placeholder” columns were note included for persons/hh’s tables b/c they reference models that we’re not yet running
 
 ### Lingering questions:
 
