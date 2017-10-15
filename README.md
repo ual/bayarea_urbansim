@@ -38,32 +38,45 @@ Fall 2017 Work
 - [ ] merge asim_settings.yaml with urbansim settings.yaml
 - [ ] file addt’l asim modules (skim.py, asim_simulate.py, tracing.py, etc.) into core urbansim code
 
-### Datasources:
+### Configs files needed:
 
-- [x] mtc_asim.h5
-- [x] skims.omx
-- [x] destination_mode_choice_size_terms.csv
+In the main `baus` directory:
+    - [x] asim_settings.yaml
+In the `configs` directory:
+    - [x] *destination_choice_size_terms.csv*
+    - [x] *logsums_spec_work.csv*
+    - [x] *tour_mode_choice.yaml*
+    - [x] *workplace_location.csv*
+    - [x] *workplace_location_sample.csv*
+    - [x] *workplace_location.yaml*
 
-### In-memory orca tables:
+### Datasources needed:
 
-- [x] `asim_households`
-- [x] `asim_persons`
-- [x] `asim_persons_merged`
-- [x] `destination_size_terms`
+- [x] *mtc_asim.h5*
+- [x] *skims.omx*
+- [x] *destination_mode_choice_size_terms.csv*
+
+### In-memory orca tables needed:
+This is really bad form, but I've prefixed all of these orca tables with `asim` in order to keep them separate from the tables of the same name used by the rest of urbansim. Eventually we can and should merge them all, but it was necessary to keep them separate until testing was complete. It's ugly, however, because many methods and functions depend on calls to the orca table names, so wherever `persons` or `households` is mentioned in the activitysim code I've had to add the prefix `asim_`. It was a pain to do so, and will be a pain to revert once the datasources have been merged. I also probably missed a bunch of calls where I should have added the prefix, but there's no way to know until things start to breaking. When they do, its a good chance this is the cause.
+
 - [x] `asim_store`
+    - [x] `asim_households`
+    - [x] `asim_persons`
+    - [x] `asim_persons_merged`
+- [x] `destination_size_terms`
 - [x] `skim_dict`
 
 ### New baus files:
 
-- asim_datasources.py
+- **asim_datasources.py**
     - combination of orca registrations from:
         - `asim.abm.tables.landuse`
         - `asim.abm.tables.size_terms`
         - `asim.abm.tables.skims`
         - `asim.abm.tables.households`
         - `asim.abm.tables.persons`
-- asim_models.py
-- asim_utils.py
+- **asim_models.py**
+- **asim_utils.py**
     - combination of functions from:
         - `asim.core.config`
         - `asim.core.util`
@@ -71,32 +84,25 @@ Fall 2017 Work
         - `asim.abm.tables.size_terms`
         - `asim.abm.models.util.logsums`
 
-### Configs files:
 
-- [x] destination_choice_size_terms.csv
-- [x] logsums_spec_work.csv
-- [x] tour_mode_choice.yaml
-- [x] workplace_location.csv
-- [x] workplace_location_sample.csv
-- [x] workplace_location.yaml
 
-### Addt’l files/scripts not placed in `asim_*`-prefixed .py files:
+### Addt’l modules ported over as-is:
 
-- [x] skim.py
+- [x] **skim.py**
     - defines skim class objects that are necessary for loading the skims in asim_datasources.py
-- [x] tracing.py
+- [x] **tracing.py**
     - for orca tracing, this should be very useful for urbansim but its already used by many asim models.
-- [x] interaction_sample.py
+- [x] **interaction_sample.py**
     - sampling of alternatives
-    - choosers must be merged with alternatives b/c there are interaction terms….not sure I understand merging here
-- [x] interaction_simulate.py
-- [x] interaction_sample_simulate.py
-- [x] logit.py
-- [x] asim_simulate.py
-    - from asim.core.simulate
+    - choosers must be merged with alternatives b/c there are interaction terms...not sure I understand merging here
+- [x] **interaction_simulate.py**
+- [x] **interaction_sample_simulate.py**
+- [x] **logit.py**
+- [x] **asim_simulate.py**
+    - from `asim.core.simulate`
     - first tried to just merge functions into asim_utils but there’s too much code
-- [x] asim_misc.py
-    - from asim.abm.misc
+- [x] **asim_misc.py**
+    - from `asim.abm.misc`
     - basically just loading orca.injectables from `asim_settings`
     - first tried to just merge functions into asim_utils but there’s too much code
 
