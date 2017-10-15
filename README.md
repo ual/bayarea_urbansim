@@ -37,7 +37,7 @@ Fall 2017 Work
 ### Configs files needed:
 
 - In the main `baus` directory:
-    - [x] asim_settings.yaml  
+    - [x] *asim_settings.yaml*
 - In the `configs` directory:
     - [x] *destination_choice_size_terms.csv*
     - [x] *logsums_spec_work.csv*
