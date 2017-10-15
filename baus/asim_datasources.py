@@ -3,34 +3,10 @@ import pandas as pd
 import os
 import asim_utils
 import asim_simulate
+import asim_misc
 import skim as askim
 import tracing
 import openmatrix as omx
-
-
-######################
-# from asim.abm.misc #
-######################
-
-@orca.injectable(cache=True)
-def asim_store(data_dir, asim_settings):
-    if 'store' not in asim_settings:
-        print("store file name not specified in settings")
-        raise RuntimeError("store file name not specified in settings")
-    fname = os.path.join(data_dir, asim_settings["store"])
-    if not os.path.exists(fname):
-        print("store file not found: %s" % fname)
-        raise RuntimeError("store file not found: %s" % fname)
-
-    file = pd.HDFStore(fname, mode='r')
-    asim_utils.close_on_exit(file, fname)
-
-    return file
-
-
-@orca.injectable(cache=True)
-def households_sample_size(asim_settings):
-    return asim_settings.get('households_sample_size', 0)
 
 
 ################################

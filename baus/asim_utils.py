@@ -232,6 +232,13 @@ def get_rn_generator():
     return _PRNG
 
 
+def add_dependent_columns(base_dfname, new_dfname):
+    tbl = orca.get_table(new_dfname)
+    for col in tbl.columns:
+        # logger.debug("Adding dependent column %s" % col)
+        orca.add_column(base_dfname, col, tbl[col])
+
+
 #####################################
 # from asim.abm.models.util.logsums #
 #####################################
