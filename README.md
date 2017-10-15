@@ -15,26 +15,26 @@ Fall 2017 Work
 ### Lingering questions:
 
 - If module c contains orca injectables, and I import module c inside module b, do those injectables get registered when I load module b in module a?
-    - currently loading asim_misc in asim_datasources which gets loaded in asim_models
+    - currently loading `asim_misc` in `asim_datasources` which gets loaded in `asim_models`
 
 ### TO DO:
 
 - [x] clean up interaction_sample.py in baus
 - [x] clean up logit.py in baus
 - [x] clean up asim_simulate.py in baus
-- [x] port over workplace_location_logsums
+- [x] port over `workplace_location_logsums`
 - [x] clean up interaction_sample_simulate.py in baus
-- [x] port over workplace_location_simulate
-- [ ] try to run workplace_location_choice as a model step in urbansim
+- [x] port over `workplace_location_simulate`
+- [ ] try to run `workplace_location_choice` as a model step in urbansim
 - [ ] workplace location choice needs its own mode_choice config
 - [ ] replace datasources with “Full Example” datasources from MTC Box
 - [ ] diff the datasources (persons/hh’s) with the urbansim datasources to see if they can be replaced
-- [ ] replace asim_persons with urbansim persons
-- [ ] replace asim_households with households
-- [ ] merge asim_store with urbansim store
+- [ ] replace `asim_persons` with urbansim `persons`
+- [ ] replace `asim_households` with `households`
+- [ ] merge `asim_store` with urbansim `store`
 - [ ] replace random number generation in asim_utils.py with random seed urbansim
 - [ ] replace logit.py with choiceModels logit
-- [ ] merge asim_datasources, asim_models, asim_utils with main urbansim modules
+- [ ] merge `asim_datasources`, `asim_models`, `asim_utils` with main urbansim modules
 - [ ] merge asim_settings.yaml with urbansim settings.yaml
 - [ ] file addt’l asim modules (skim.py, asim_simulate.py, tracing.py, etc.) into core urbansim code
 
@@ -46,30 +46,30 @@ Fall 2017 Work
 
 ### In-memory orca tables:
 
-- [x] asim_households
-- [x] asim_persons
-- [x] asim_persons_merged
-- [x] destination_size_terms
-- [x] asim_store
-- [x] skim_dict
+- [x] `asim_households`
+- [x] `asim_persons`
+- [x] `asim_persons_merged`
+- [x] `destination_size_terms`
+- [x] `asim_store`
+- [x] `skim_dict`
 
 ### New baus files:
 
 - asim_datasources.py
     - combination of orca registrations from:
-        - asim.abm.tables.landuse
-        - asim.abm.tables.size_terms
-        - asim.abm.tables.skims
-        - asim.abm.tables.households
-        - asim.abm.tables.persons
+        - `asim.abm.tables.landuse`
+        - `asim.abm.tables.size_terms`
+        - `asim.abm.tables.skims`
+        - `asim.abm.tables.households`
+        - `asim.abm.tables.persons`
 - asim_models.py
 - asim_utils.py
     - combination of functions from:
-        - asim.core.config
-        - asim.core.util
-        - asim.core.pipeline
-        - asim.abm.tables.size_terms
-        - asim.abm.models.util.logsums
+        - `asim.core.config`
+        - `asim.core.util`
+        - `asim.core.pipeline`
+        - `asim.abm.tables.size_terms`
+        - `asim.abm.models.util.logsums`
 
 ### Configs files:
 
@@ -97,7 +97,7 @@ Fall 2017 Work
     - first tried to just merge functions into asim_utils but there’s too much code
 - [x] asim_misc.py
     - from asim.abm.misc
-    - basically just loading orca.injectables from asim_settings
+    - basically just loading orca.injectables from `asim_settings`
     - first tried to just merge functions into asim_utils but there’s too much code
 
 ### New package requirements for urbansim:
