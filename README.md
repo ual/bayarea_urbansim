@@ -64,21 +64,19 @@ This is really bad form, but I've prefixed all of these orca tables with `asim` 
 
 ### New baus files:
 
-- **asim_datasources.py**
-    - combination of orca registrations from:
-        - `asim.abm.tables.landuse`
-        - `asim.abm.tables.size_terms`
-        - `asim.abm.tables.skims`
-        - `asim.abm.tables.households`
-        - `asim.abm.tables.persons`
+- **asim_datasources.py** -- combination of orca registrations from:
+    - `asim.abm.tables.landuse`
+    - `asim.abm.tables.size_terms`
+    - `asim.abm.tables.skims`
+    - `asim.abm.tables.households`
+    - `asim.abm.tables.persons`
 - **asim_models.py**
-- **asim_utils.py**
-    - combination of functions from:
-        - `asim.core.config`
-        - `asim.core.util`
-        - `asim.core.pipeline`
-        - `asim.abm.tables.size_terms`
-        - `asim.abm.models.util.logsums`
+- **asim_utils.py** -- combination of functions from:
+    - `asim.core.config`
+    - `asim.core.util`
+    - `asim.core.pipeline`
+    - `asim.abm.tables.size_terms`
+    - `asim.abm.models.util.logsums`
 
 
 
