@@ -36,21 +36,18 @@ Fall 2017 Work
 
 ### Configs files needed:
 
-- In the main `baus` directory:
-    - [x] *asim_settings.yaml*
-- In the `configs` directory:
-    - [x] *destination_choice_size_terms.csv*
-    - [x] *logsums_spec_work.csv*
-    - [x] *tour_mode_choice.yaml*
-    - [x] *workplace_location.csv*
-    - [x] *workplace_location_sample.csv*
-    - [x] *workplace_location.yaml*
+- [x] *asim_settings.yaml* -- from *settings.yaml* in asim configs dir
+- [x] *destination_choice_size_terms.csv*
+- [x] *logsums_spec_work.csv*
+- [x] *tour_mode_choice.yaml*
+- [x] *workplace_location.csv*
+- [x] *workplace_location_sample.csv*
+- [x] *workplace_location.yaml*
 
 ### Datasources needed:
 
 - [x] *mtc_asim.h5*
 - [x] *skims.omx*
-- [x] *destination_mode_choice_size_terms.csv*
 
 ### In-memory orca tables needed:
 This is really bad form, but I've prefixed all of these orca tables with `asim` in order to keep them separate from the tables of the same name used by the rest of urbansim. Eventually we can and should merge them all, but it was necessary to keep them separate until testing was complete. It's ugly, however, because many methods and functions depend on calls to the orca table names, so wherever `persons` or `households` is mentioned in the activitysim code I've had to add the prefix `asim_`. It was a pain to do so, and will be a pain to revert once the datasources have been merged. I also probably missed a bunch of calls where I should have added the prefix, but there's no way to know until things start to breaking. When they do, its a good chance this is the cause.
