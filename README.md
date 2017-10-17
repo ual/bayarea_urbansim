@@ -86,19 +86,19 @@ This is really bad form, but I've prefixed all of these orca tables with `asim` 
     - defines skim class objects that are necessary for loading the skims in asim_datasources.py
 - [x] **tracing.py**
     - for orca tracing, this should be very useful for urbansim but its already used by many asim models.
-- [x] **interaction_sample.py**
-    - sampling of alternatives
-    - choosers must be merged with alternatives b/c there are interaction terms...not sure I understand merging here
-- [x] **interaction_simulate.py**
-- [x] **interaction_sample_simulate.py**
 - [x] **logit.py**
-- [x] **asim_simulate.py**
-    - from `asim.core.simulate`
-    - first tried to just merge functions into asim_utils but there’s too much code
-- [x] **asim_misc.py**
-    - from `asim.abm.misc`
-    - basically just loading orca.injectables from `asim_settings`
-    - first tried to just merge functions into asim_utils but there’s too much code
+    - defines logit structure, makes choices
+- [x] **asim_simulate.py** -- from `asim.core.simulate`
+    - simulation logic: computing utilities, probabilities, evaluating estimated logit models
+    - not to be confused with simulation.py which executes the model steps
+- [x] **interaction_sample.py**
+    - random sampling of alternatives when interaction terms are involved
+- [x] **interaction_sample_simulate.py**
+    - eval logit models when interaction terms are involved
+- [x] **interaction_simulate.py**
+    - same methods as above but for models specs without random sampling.
+- [x] **asim_misc.py** -- from `asim.abm.misc`
+    - loads orca.injectables from `asim_settings`
 
 ### New package requirements for urbansim:
 
