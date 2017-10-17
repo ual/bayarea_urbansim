@@ -3,7 +3,6 @@ Fall 2017 Work
 ## Merging Long-term Choice Models from ActivitySim
 ### Notes:
 
-- Workplace_location_choice need own mode_choice config
 - Instead of the logger used throughought the Asim code, UrbanSim just redirects stdout to a logfile and issues print commands. I've converted all `logging` commands in Activitysim to `print()` statements. This was probably not the right thing to do, as the Asim code is more verbose than UrbanSim.
 - Skims are loaded from omx objects, we prob want to change this
 - Some “placeholder” columns were note included for persons/hh’s tables b/c they reference models that we’re not yet running
@@ -33,6 +32,7 @@ Fall 2017 Work
 - [ ] merge `asim_datasources`, `asim_models`, `asim_utils` with main urbansim modules
 - [ ] merge asim_settings.yaml with urbansim settings.yaml
 - [ ] file addt’l asim modules (skim.py, asim_simulate.py, tracing.py, etc.) into core urbansim code
+- [ ] deal with `workplace_location_logsums` dependence on *tour_mode_choice.yaml*
 
 ### Configs files needed:
 
