@@ -532,7 +532,6 @@ def travel_model_output(parcels, households, jobs, buildings,
         base = False
 
     if year in [2010, 2015, 2020, 2025, 2030, 2035, 2040]:
-
         df = taz
         taz_df = pd.DataFrame(index=zones.index)
         taz_df["sd"] = df.sd
@@ -554,6 +553,7 @@ def travel_model_output(parcels, households, jobs, buildings,
         taz_df["gqpop"] = df.gqpop.fillna(0)
         taz_df["mfdu"] = df.mfdu
         taz_df["sfdu"] = df.sfdu
+        taz_df["area_type"] = df.areatype
         taz_df["ciacre_unweighted"] = df.ciacre
         taz_df["resacre_unweighted"] = df.resacre
         taz_df["ciacre"] = scaled_ciacre(
