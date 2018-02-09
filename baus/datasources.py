@@ -219,7 +219,7 @@ def baseyear_taz_controls():
 
 @orca.table(cache=True)
 def base_year_summary_taz():
-    return pd.read_csv(os.path.join('output',
+    return pd.read_csv(os.path.join('data',
                        'baseyear_taz_summaries_2010.csv'),
                        index_col="zone_id")
 

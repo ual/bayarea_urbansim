@@ -21,7 +21,7 @@ import pandas as pd
 @orca.step('rsh_simulate')
 def rsh_simulate(buildings, aggregations, settings):
     utils.hedonic_simulate("rsh.yaml", buildings, aggregations,
-                           "residential_price")
+                           "residential_price", cast=True)
     if "rsh_simulate" in settings:
         low = float(settings["rsh_simulate"]["low"])
         high = float(settings["rsh_simulate"]["high"])
@@ -49,22 +49,20 @@ def hlcm_simulate(households, buildings, aggregations, settings, low_income):
     open(misc.config("hlcm_tmp.yaml"), "w").write(yaml.dump(cfg))
 
     # low income into affordable units
-    utils.lcm_simulate("hlcm_tmp.yaml", households, buildings,
-                       aggregations,
-                       "building_id", "residential_units",
-                       "vacant_affordable_units",
-                       settings.get("enable_supply_correction", None))
+    utils.lcm_simulate(
+        "hlcm_tmp.yaml", households, buildings, aggregations, "building_id",
+        "residential_units", "vacant_affordable_units", settings.get(
+            "enable_supply_correction", None), cast=True)
 
     os.remove(misc.config("hlcm_tmp.yaml"))
 
     print "\nMarket rate housing HLCM:\n"
 
     # then everyone into market rate units
-    utils.lcm_simulate("hlcm.yaml", households, buildings,
-                       aggregations,
-                       "building_id", "residential_units",
-                       "vacant_market_rate_units",
-                       settings.get("enable_supply_correction", None))
+    utils.lcm_simulate(
+        "hlcm.yaml", households, buildings, aggregations, "building_id",
+        "residential_units", "vacant_market_rate_units", settings.get(
+            "enable_supply_correction", None), cast=True)
 
 
 @orca.step('households_transition')
