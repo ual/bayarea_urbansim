@@ -1,174 +1,102 @@
-DRAFT Bay Area Urbansim Implementation
+Fall 2017 Work
 =======
+## Merging Long-term Choice Models from ActivitySim
+### Notes:
 
-This is the DRAFT UrbanSim implementation for the Bay Area. Documenation for the Bay Area model is available at http://metropolitantransportationcommission.github.io/baus_docs/ and documentation for the generic UrbanSim model is at https://udst.github.io/urbansim/index.html
+- Instead of the logger used throughought the Asim code, UrbanSim just redirects stdout to a logfile and issues print commands. I've converted all `logging` commands in Activitysim to `print()` statements. This was probably not the right thing to do, as the Asim code is more verbose than UrbanSim.
+- Skims are loaded from omx objects, we prob want to change this
+- Some “placeholder” columns were note included for persons/hh’s tables b/c they reference models that we’re not yet running
 
-UAL research fork
------------------
+### Lingering questions:
 
-This copy of the Bay Area UrbanSim repository is a research fork maintained by U.C. Berkeley's Urban Analytics Lab (http://ual.berkeley.edu).
+- If module c contains orca injectables, and I import module c inside module b, do those injectables get registered when I load module b in module a?
+    - currently loading `asim_misc` in `asim_datasources` which gets loaded in `asim_models`
 
-The `master` branch tracks the main UDST fork, and the `ual-development` branch contains our modifications to the model. Our current projects focus on extending Bay Area UrbanSim to better capture processes of residential displacement and affordable housing provision.
+### TO DO:
 
-Modifications include: 
+- [x] clean up interaction_sample.py in baus
+- [x] clean up logit.py in baus
+- [x] clean up asim_simulate.py in baus
+- [x] port over `workplace_location_logsums`
+- [x] clean up interaction_sample_simulate.py in baus
+- [x] port over `workplace_location_simulate`
+- [ ] try to run `workplace_location_choice` as a model step in urbansim
+- [ ] workplace location choice needs its own mode_choice config
+- [ ] replace datasources with “Full Example” datasources from MTC Box
+- [ ] diff the datasources (persons/hh’s) with the urbansim datasources to see if they can be replaced
+- [ ] replace `asim_persons` with urbansim `persons`
+- [ ] replace `asim_households` with `households`
+- [ ] merge `asim_store` with urbansim `store`
+- [ ] replace random number generation in asim_utils.py with random seed urbansim
+- [ ] replace logit.py with choiceModels logit
+- [ ] merge `asim_datasources`, `asim_models`, `asim_utils` with main urbansim modules
+- [ ] merge asim_settings.yaml with urbansim settings.yaml
+- [ ] file addt’l asim modules (skim.py, asim_simulate.py, tracing.py, etc.) into core urbansim code
+- [ ] deal with `workplace_location_logsums` dependence on *tour_mode_choice.yaml*
 
-#### Data schemas
+### Configs files needed:
 
-* Builds out the representation of individual housing units to include a semi-persistent tenure status, which is assigned based on characteristics of initial unit occupants
-* Joins additional race/ethnicity PUMS variables to synthetic households [NB: currently missing from the reconciled model, but will be re-added]
-* Adds a representation of market rents alongside market sale prices
+- [x] *asim_settings.yaml* -- from *settings.yaml* in asim configs dir
+- [x] *destination_choice_size_terms.csv*
+- [x] *logsums_spec_work.csv*
+- [x] *tour_mode_choice.yaml*
+- [x] *workplace_location.csv*
+- [x] *workplace_location_sample.csv*
+- [x] *workplace_location.yaml*
 
-#### Model steps
+### Datasources needed:
 
-* Residential hedonics predict market rents and sale prices separately, with rents estimated from Craigslist listings
-* Household move-out choice is conditional on tenure status
-* Household location choice is modeled separately for renters and owners, and includes race/ethnicity measures as explanatory variables
-* Developer models are updated to produce both rental and ownership housing stock
+- [x] *mtc_asim.h5*
+- [x] *skims.omx*
 
-Notebooks, work history, code samples, etc are kept in a separate [bayarea_urbansim_work](https://github.com/ual/bayarea_urbansim_work) repository. 
+### In-memory orca tables needed:
+This is really bad form, but I've prefixed all of these orca tables with `asim` in order to keep them separate from the tables of the same name used by the rest of urbansim. Eventually we can and should merge them all, but it was necessary to keep them separate until testing was complete. It's ugly, however, because many methods and functions depend on calls to the orca table names, so wherever `persons` or `households` is mentioned in the activitysim code I've had to add the prefix `asim_`. It was a pain to do so, and will be a pain to revert once the datasources have been merged. I also probably missed a bunch of calls where I should have added the prefix, but there's no way to know until things start to breaking. When they do, its a good chance this is the cause.
 
-#### Current status (August 2016)
+- [x] `asim_store`
+    - [x] `asim_households`
+    - [x] `asim_persons`
+    - [x] `asim_persons_merged`
+- [x] `destination_size_terms`
+- [x] `skim_dict`
 
-* All of the UAL alterations have been refactored as modular orca steps
-* This code is contained in `baus/ual.py`, `configs/ual_settings.yaml` and individual `yaml` files as needed for regression models that have been re-estimated
-* There are *no* changes to `urbansim`, `urbansim_defaults`, or MTC's orca initialization and model steps
-* MTC and UAL model steps can be mixed and matched by passing different lists to orca; see `run.py` for examples
-* The UAL model steps document and test for required data characteristics, using the [orca_test](https://github.com/udst/orca_test) library
+### New baus files:
 
-#### Installation
-
-The following setup procedure seems reliable for OS X and Linux. See [ual_baus_install.sh](https://github.com/ual/bayarea_urbansim/blob/ual-development/ual_baus_install_template.sh) for a programmatic version. 
-
-* Install Anaconda
-* Git-clone the repositories for `orca`, `urbansim`, `pandana`, `orca_test`, `urbansim_defaults`, and `bayarea_urbansim`
-* Run `python setup.py develop` for all of them (except `bayarea_urbansim`)
-* Switch to the `ual-development` branch of `bayarea_urbansim`
-* Copy the appropriate data files into the `data` directory (or add symbolic links)
-* Try running `python run.py`
-
-### Subsequent README content is from the master branch
-
-Install Overview
-----------------
-
-* https://mtcdrive.account.box.com/login
-* get anaconda (version as indicated in reqs below)
-* bash Anaconda2-4.0.0-Linux-x86_64.sh
-* yes to prepend install location to .bashrc
-* open new terminal
-* sudo apt-get update
-* sudo apt-get -y install git g++ python-dev unzip
-* git clone https://github.com/MetropolitanTransportationCommission/bayarea_urbansim.git
-* pip install -r requirements.txt (comment out pandana)
-* pip install pandana
-* get data
-* change RUNNUM so in 5000s etc
-* python run.py -s 4 & OR python all.py &
-
-Data
-----
-
-We track the data for this project in the Makefile in this repository. The makefile will generally be the most up to date list of which data is needed, where it goes in the directory, etc.
-
-To fetch data with [AWS CLI](https://aws.amazon.com/cli/) and Make, you can:
-`make data`.
-
-Below we provide a list to links of the data in the Makefile for convenience, but in general the makefile is what is being used to run simulations. If you find that something below is out of date w/r/t the makefile, please feel free to update it and submit a pull request.
-
-####Data necessary for run.py to run
-
-These data should be in the data/ folder:
-
-https://s3.amazonaws.com/bayarea_urbansim/data/2015_06_01_osm_bayarea4326.h5  
-https://s3.amazonaws.com/bayarea_urbansim/data/2015_08_03_tmnet.h5  
-https://s3.amazonaws.com/bayarea_urbansim/data/2015_12_21_zoning_parcels.csv  
-https://s3.amazonaws.com/bayarea_urbansim/data/02_01_2016_parcels_geography.csv  
-https://s3.amazonaws.com/bayarea_urbansim/data/2015_08_29_costar.csv  
-https://s3.amazonaws.com/bayarea_urbansim/data/2015_09_01_bayarea_v3.h5  
-
-Because the hdf5 file used here contains one table with  proprietary data, you will need to enter credentials to download it. You can request them from Tom Buckley(tbuckl@mtc.ca.gov). Or if you already have access to Box, you can download the hdf5 file from there. 
-
-####Data Description  
+- **asim_datasources.py** -- combination of orca registrations from:
+    - `asim.abm.tables.landuse`
+    - `asim.abm.tables.size_terms`
+    - `asim.abm.tables.skims`
+    - `asim.abm.tables.households`
+    - `asim.abm.tables.persons`
+- **asim_models.py**
+- **asim_utils.py** -- combination of functions from:
+    - `asim.core.config`
+    - `asim.core.util`
+    - `asim.core.pipeline`
+    - `asim.abm.tables.size_terms`
+    - `asim.abm.models.util.logsums`
 
 
-How To 
-------
-####Set Up Simulation and Estimation  
-Install dependencies using standard [pip](https://pip.pypa.io/en/latest/user_guide.html#requirements-files) requirements install:
-`pip install -r requirements.txt`
-You may also need to install pandana
-`pip install pandana`
 
-####Set up using a Virtual Machine
-For convenience, there is a [Vagrantfile](https://www.vagrantup.com/) and a `scripts/vagrant/bootstrap.sh` file. This is the recommended way to set up and run `Simulation.py` on Windows. 
+### Addt’l modules ported over as-is:
 
-####Enter Amazon Web Services credentials to fetch data.
+- [x] **skim.py**
+    - defines skim class objects that are necessary for loading the skims in asim_datasources.py
+- [x] **tracing.py**
+    - for orca tracing, this should be very useful for urbansim but its already used by many asim models.
+- [x] **logit.py**
+    - defines logit structure, makes choices
+- [x] **asim_simulate.py** -- from `asim.core.simulate`
+    - simulation logic: computing utilities, probabilities, evaluating estimated logit models
+    - not to be confused with simulation.py which executes the model steps
+- [x] **interaction_sample.py**
+    - random sampling of alternatives when interaction terms are involved
+- [x] **interaction_sample_simulate.py**
+    - eval logit models when interaction terms are involved
+- [x] **interaction_simulate.py**
+    - same methods as above but for models specs without random sampling.
+- [x] **asim_misc.py** -- from `asim.abm.misc`
+    - loads orca.injectables from `asim_settings`
 
-See [Installing](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configuring] (http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) 
+### New package requirements for urbansim:
 
-Each of the following just runs a different set of models for a different set of years.
-
-####Run a Simulation  
-In the repository directory type `python run.py`  
-
-####Estimate Regressions used in the Simulation
-In the repository directory edit `run.py` and set `MODE` to "estimation" and type `python run.py`  
-
-####Run a Base Year Simulation
-In the repository directory edit `run.py` and set `MODE` to "baseyearsim" and type `python run.py`.  A base year simulation is used to run a few models and make sure everything matches the first year of the control totals but not to add any new buildings.  This is then used in comparison of the year 2040 to the base year for all future simulations (until the control totals change) and this mode is rerun.
-
-####Review Outputs from Simulation
-
-#####Runs Directory
-
-ALL OUTPUT IN THIS DIRECTORY IS CONSIDERED DRAFT. PLEASE CONTACT MTC FOR OFFICIAL FINAL OUTPUTS.
-
-`#` = a number that is updated in the RUNNUM file in the bayarea_urbansim directory each time you run Simulation.py.
-
-Many files are output to the `runs/` directory. They are described below.
-
-filename |description
-----------------------------|-----------
-run#_topsheet_2040 | An overall summary of various housing, employment, etc by regional planning area types
-run#_parcel_output.csv 		|csv of parcels that are built for review in Explorer
-run#_parcel_data_diff.csv 			|A CSV with parcel level output for *all* parcels with lat, lng and includes change in total_residential_units and change in total_job_spaces, as well as zoned capacity measures
-run#_simulation_output.json |summary by TAZ for review in Explorer (unix only)
-run#_taz_summaries 			|A CSV for [input to the MTC travel model](http://analytics.mtc.ca.gov/foswiki/UrbanSimTwo/OutputToTravelModel)
-run#_urban_footprint_summary | A CSV with A Summary of how close the scenario is to meeting [Performance Target 4](http://planbayarea.org/the-plan/plan-details/goals-and-targets.html)
-
-
-Browse results [here](http://urbanforecast.com/runs/)   
-
-######Other Directories
-Below is an explanation of the directories in this repository not described above.
-
-configs/    
-
-The YAML files in this directory allow you to configure UrbanSim by changing the keys and values of arguments taken by urbansim functions. See the [UrbanSim Defaults](https://udst.github.io/urbansim_defaults/) docs for more details.
-
-Note that even the values taken by data can be and are configured with these config files (e.g. values in `settings.yaml`).
-
-data_regeneration/
-
-The scripts in here can be used to re-create the data in the `data/` folder from source (various local, state, and federal sources). Use these to re-create the data here when source data change fundamentally.
-
-scripts/
-This is a good place to put scripts that can exist independently of the analysis environment here.  
-
-####Parcel Geometries
-
-The parcel geometries are the basis of many operations in the simulation. For example, as one can see in [this pull request](https://github.com/MetropolitanTransportationCommission/bayarea_urbansim/pull/121), in order to add schedule real estate development projects to the list of projects that are included in the simulation, one must use an existing `geom_id`, which is a field on the parcels table added [here](https://github.com/MetropolitanTransportationCommission/bayarea_urbansim/blob/master/data_regeneration/match_aggregate.py#L775-L784).
-
-Parcel geometries are available at the following link:
-
-https://s3.amazonaws.com/bayarea_urbansim/data/09_01_2015_parcel_shareable.zip
-
-#####Geom ID
-
-Please be aware that many ArcGIS users have found that ArcGIS automatically converts and then rounds the `geom_id` column, effectively making it unusable. Therefore we recommend using QGIS, which does not exhibit this behavior with delimited files by default. 
-
-Also, in Microsoft Excel, you will need to make sure that the data type of the `geom_id` column is set to `number` and that the number of decimal points is set to 0. Otherwise when you save the CSV again the `geom_id`s will be unusable.
-
-What is the `geom_id` field and why does it exist? 
-
-In short, this is a legacy identifier. The `geom_id` field was introduced as a stable identifier for parcels across shapefiles, database tables, CSV's, and other data types. It is an integer because at some point there was a need to support integer only identifiers. It is not based on an Assessor's Parcel Numbers because there was a perception that those were inadequate. And it is based on the geometry of the parcel because many users have found that geometries are the most important feature of parcels.
+- openmatrix
