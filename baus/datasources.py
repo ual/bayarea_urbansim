@@ -890,3 +890,7 @@ orca.broadcast('nodes', 'costar', cast_index=True, onto_on='node_id')
 orca.broadcast('tmnodes', 'costar', cast_index=True, onto_on='tmnode_id')
 orca.broadcast('logsums', 'homesales', cast_index=True, onto_on='zone_id')
 orca.broadcast('logsums', 'costar', cast_index=True, onto_on='zone_id')
+orca.broadcast('parcels', 'costar', cast_index=True, onto_on='parcel_id')
+orca.broadcast('buildings', 'costar', cast_index=True, onto_on='parcel_id')
+
+
