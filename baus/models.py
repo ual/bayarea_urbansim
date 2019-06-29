@@ -917,47 +917,52 @@ def static_parcel_proportional_job_allocation(static_parcels):
         proportional_job_allocation(parcel_id)
 
 
-def make_network(name, weight_col, max_distance):
-    st = pd.HDFStore(os.path.join(misc.data_dir(), name), "r")
-    nodes, edges = st.nodes, st.edges
-    net = pdna.Network(nodes["x"], nodes["y"], edges["from"], edges["to"],
-                       edges[[weight_col]])
-    net.precompute(max_distance)
-    return net
+# def make_network(name, weight_col, max_distance):
+#     st = pd.HDFStore(os.path.join(misc.data_dir(), name), "r")
+#     nodes, edges = st.nodes, st.edges
+#     net = pdna.Network(nodes["x"], nodes["y"], edges["from"], edges["to"],
+#                        edges[[weight_col]])
+#     net.precompute(max_distance)
+#     return net
 
 
-def make_network_from_settings(settings):
-    return make_network(
-        settings["name"],
-        settings.get("weight_col", "weight"),
-        settings['max_distance']
-    )
+# def make_network_from_settings(settings):
+#     return make_network(
+#         settings["name"],
+#         settings.get("weight_col", "weight"),
+#         settings['max_distance']
+#     )
 
 
 @orca.injectable(cache=True)
-def net(settings):
-    nets = {}
-    pdna.reserve_num_graphs(len(settings["build_networks"]))
+def netwalk(walk_nodes, walk_edges):
+    # pdna.reserve_num_graphs(len(settings["build_networks"]))
 
     # yeah, starting to hardcode stuff, not great, but can only
     # do nearest queries on the first graph I initialize due to crummy
     # limitation in pandana
-    for key in settings["build_networks"].keys():
-        nets[key] = make_network_from_settings(
-            settings['build_networks'][key]
-        )
-
-    return nets
+    # for key in settings["build_networks"].keys():
+    #     nets[key] = make_network_from_settings(
+    #         settings['build_networks'][key]
+    #     )
+    walk_edges = walk_edges.to_frame()
+    walk_nodes = walk_nodes.to_frame()
+    netwalk = pdna.Network(
+        walk_nodes.x, walk_nodes.y, walk_edges.u,
+        walk_edges.v, walk_edges[['length']], twoway=True)
+    netwalk.precompute(2500)
+    return netwalk
 
 
 @orca.step()
-def local_pois(settings):
+def local_pois(walk_nodes, walk_edges):
     # because of the aforementioned limit of one netowrk at a time for the
     # POIS, as well as the large amount of memory used, this is now a
     # preprocessing step
-    n = make_network(
-        settings['build_networks']['walk']['name'],
-        "weight", 3000)
+    n = pdna.Network(
+        walk_nodes.x, walk_nodes.y, walk_edges.u,
+        walk_edges.v, walk_edges[['length']], twoway=True)
+    n.precompute(2500)
 
     n.init_pois(
         num_categories=1,
@@ -981,8 +986,8 @@ def local_pois(settings):
 
 
 @orca.step()
-def neighborhood_vars(net):
-    nodes = networks.from_yaml(net["walk"], "neighborhood_vars.yaml")
+def neighborhood_vars(netwalk):
+    nodes = networks.from_yaml(netwalk, "neighborhood_vars.yaml")
     nodes = nodes.replace(-np.inf, np.nan)
     nodes = nodes.replace(np.inf, np.nan)
     nodes = nodes.fillna(0)
@@ -1031,8 +1036,8 @@ def neighborhood_vars(net):
 
 
 @orca.step()
-def price_vars(net):
-    nodes2 = networks.from_yaml(net["walk"], "price_vars.yaml")
+def price_vars(netwalk):
+    nodes2 = networks.from_yaml(netwalk, "price_vars.yaml")
     nodes2 = nodes2.fillna(0)
     print nodes2.describe()
     nodes = orca.get_table('nodes')
@@ -1118,7 +1123,6 @@ def generate_skims_vars(beam_skims_imputed, landmarks, zones):
             right_on=['from_zone_id', 'to_zone_id'])
         m.set_index('zone_id', inplace=True)
         orca.add_column('zones', i, m['gen_tt_CAR'])
-
 
     # @orca.column('zones')
     # def embarcadero(beam_skims_imputed, zones, landmarks):
