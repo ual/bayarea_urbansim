@@ -1124,47 +1124,6 @@ def generate_skims_vars(beam_skims_imputed, landmarks, zones):
         m.set_index('zone_id', inplace=True)
         orca.add_column('zones', i, m['gen_tt_CAR'])
 
-    # @orca.column('zones')
-    # def embarcadero(beam_skims_imputed, zones, landmarks):
-    #     landmarks = landmarks.to_frame()
-    #     zones = zones.to_frame()
-    #     beam_skims_imputed = beam_skims_imputed.to_frame()
-    #     poi_taz = landmarks.loc['embarcadero', 'taz1454']
-    #     zones['embarcadero_taz'] = poi_taz
-    #     zones.reset_index(inplace=True)
-    #     m = pd.merge(
-    #         zones, beam_skims_imputed,
-    #         left_on=['zone_id', 'embarcadero_taz'],
-    #         right_on=['from_zone_id', 'to_zone_id'])
-    #     return m['gen_tt_CAR']
-
-    # @orca.column('zones')
-    # def stanford(beam_skims_imputed, zones, landmarks):
-    #     landmarks = landmarks.to_frame()
-    #     zones = zones.to_frame()
-    #     beam_skims_imputed = beam_skims_imputed.to_frame()
-    #     poi_taz = landmarks.loc['stanford', 'taz1454']
-    #     zones['stanford_taz'] = poi_taz
-    #     zones.reset_index(inplace=True)
-    #     m = pd.merge(
-    #         zones, beam_skims_imputed,
-    #         left_on=['zone_id', 'stanford_taz'],
-    #         right_on=['from_zone_id', 'to_zone_id'])
-    #     return m['gen_tt_CAR']
-
-    # @orca.column('zones')
-    # def pacheights(beam_skims_imputed, zones, landmarks):
-    #     landmarks = landmarks.to_frame()
-    #     zones = zones.to_frame()
-    #     beam_skims_imputed = beam_skims_imputed.to_frame()
-    #     poi_taz = landmarks.loc['pacheights', 'taz1454']
-    #     zones['pacheights_taz'] = poi_taz
-    #     zones.reset_index(inplace=True)
-    #     m = pd.merge(
-    #         zones, beam_skims_imputed,
-    #         left_on=['zone_id', 'pacheights_taz'],
-    #         right_on=['from_zone_id', 'to_zone_id'])
-    #     return m['gen_tt_CAR']
 
 @orca.step()
 def skims_aggregations_drive():
