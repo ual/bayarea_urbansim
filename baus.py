@@ -95,7 +95,7 @@ parser.add_argument('-n', '--years-per-iter', action='store',
 options = parser.parse_args()
 
 if options.every_nth_year:
-    EVERY_NTH_YEAR = options.every_nth_year
+    EVERY_NTH_YEAR = int(options.every_nth_year)
 orca.add_injectable("years_per_iter", EVERY_NTH_YEAR)
 
 if options.console:
