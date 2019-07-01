@@ -596,7 +596,7 @@ def residential_developer(feasibility, households, buildings, parcels, year,
 
 @orca.step()
 def retail_developer(jobs, buildings, parcels, nodes, feasibility,
-                     settings, summary, add_extra_columns_func, net):
+                     settings, summary, add_extra_columns_func):
 
     dev_settings = settings['non_residential_developer']
     all_units = dev.compute_units_to_build(
