@@ -88,7 +88,7 @@ parser.add_argument('-m', '--mode', action='store', dest='mode',
 parser.add_argument('--disable-slack', action='store_true', dest='noslack',
                     help='disable slack outputs')
 
-parser.add_argument('-n', '--years-per-iter', action='store_true',
+parser.add_argument('-n', '--years-per-iter', action='store',
                     dest='every_nth_year',
                     help='simulation iteration frequency')
 
