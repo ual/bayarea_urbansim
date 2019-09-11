@@ -527,12 +527,19 @@ def impute_missing_skims(mtc_skims, beam_skims_raw):
                     ['from_zone_id', 'to_zone_id']].values))),
                 'dist'].values
 
+    # use MTC dists for all intra-taz distances
+    intra_taz_mask = df['from_zone_id'] == df['to_zone_id']
+    df.loc[intra_taz_mask, 'distanceInM'] = mtc.loc[pd.MultiIndex.from_frame(
+        df.loc[intra_taz_mask, ['from_zone_id', 'to_zone_id']]), 'dist'].values
+
+
     # create morning peak lookup
     df['gen_time_per_m'] = df['gen_tt'] / df['distanceInM']
     df['gen_cost_per_m'] = df['gen_cost'] / df['distanceInM']
     df.loc[df['hour'].isin([7, 8, 9]), 'period'] = 'AM'
     df_am = df[df['period'] == 'AM']
     df_am = df_am.replace([np.inf, -np.inf], np.nan)
+    df_am = df_am.loc[df_am.index.repeat(df_am.numObservations)]  # weighted
     am_lookup = df_am[[
         'mode', 'gen_time_per_m', 'gen_cost_per_m']].dropna().groupby(
             ['mode']).mean().reset_index()
