@@ -528,9 +528,19 @@ def impute_missing_skims(mtc_skims, beam_skims_raw):
                 'dist'].values
 
     # use MTC dists for all intra-taz distances
-    intra_taz_mask = df['from_zone_id'] == df['to_zone_id']
-    df.loc[intra_taz_mask, 'distanceInM'] = mtc.loc[pd.MultiIndex.from_frame(
-        df.loc[intra_taz_mask, ['from_zone_id', 'to_zone_id']]), 'dist'].values
+    try:
+        intra_taz_mask = df['from_zone_id'] == df['to_zone_id']
+        df.loc[intra_taz_mask, 'distanceInM'] = mtc.loc[
+            pd.MultiIndex.from_frame(df.loc[intra_taz_mask, [
+                'from_zone_id', 'to_zone_id']]), 'dist'].values
+
+    except AttributeError:
+        intra_taz_mask = df['from_zone_id'] == df['to_zone_id']
+        df.loc[intra_taz_mask, 'distanceInM'] = mtc.loc[
+            pd.MultiIndex.from_arrays(list(zip(*df.loc[
+                intra_taz_mask,
+                ['from_zone_id', 'to_zone_id']].values))),
+            'dist'].values
 
     # create morning peak lookup
     df['gen_time_per_m'] = df['gen_tt'] / df['distanceInM']
