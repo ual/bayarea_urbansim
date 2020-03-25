@@ -1,6 +1,13 @@
 DRAFT Bay Area UrbanSim (BAUS) Implementation
 =======
+## SMART Mobility Runs
 
+### How To
+1. Create .h5 datastore from .csv's stored on s3
+   ```ipython -i make_model_data_hdf.py -- -b -i s3://baus-data/spring_2019/ -o ../data```
+
+
+=======
 [![Build Status](https://travis-ci.org/UDST/bayarea_urbansim.svg?branch=master)](https://travis-ci.org/UDST/bayarea_urbansim)
 
 This is the DRAFT UrbanSim implementation for the Bay Area. Policy documentation for the Bay Area model is available [here](http://data.mtc.ca.gov/bayarea_urbansim/) and documentation for the UrbanSim framework is available [here](https://udst.github.io/urbansim/).
