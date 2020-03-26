@@ -10,7 +10,7 @@ choosers_predict_filters: (tenure == 'rent')
 
 alts_fit_filters: null
 
-alts_predict_filters: null
+alts_predict_filters: (tenure == 'rent')
 
 interaction_predict_filters: null
 

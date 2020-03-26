@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import sys
 import time
@@ -7,6 +9,7 @@ from baus import slr
 from baus import earthquake
 from baus import ual
 from baus import validation
+import numpy as np
 import pandas as pd
 import orca
 import socket
@@ -26,6 +29,7 @@ DATA_OUT = './output/model_data_output.h5'
 MODE = "simulation"
 SLACK = MAPS = "URBANSIM_SLACK" in os.environ
 LOGS = True
+RANDOM_SEED = False
 INTERACT = False
 SCENARIO = None
 EVERY_NTH_YEAR = 5
@@ -85,6 +89,9 @@ parser.add_argument('-y', '--years', action='store', dest='years',
 parser.add_argument('-m', '--mode', action='store', dest='mode',
                     help='which mode to run (see code for mode options)')
 
+parser.add_argument('--random-seed', action='store_true', dest='random_seed',
+                    help='set a random seed for consistent stochastic output')
+
 parser.add_argument('--disable-slack', action='store_true', dest='noslack',
                     help='disable slack outputs')
 
@@ -125,6 +132,9 @@ SKIP_BASE_YEAR = options.skip_base_year
 if options.mode:
     MODE = options.mode
 
+if options.random_seed:
+    RANDOM_SEED = True
+
 if options.noslack:
     SLACK = False
 
@@ -133,10 +143,12 @@ SCENARIO = orca.get_injectable("scenario")
 run_num = orca.get_injectable("run_number")
 
 if LOGS:
-    print '***The Standard stream is being written to /runs/run{0}.log***'\
-        .format(run_num)
+    print('***The Standard stream is being written to /runs/run{0}.log***'
+          .format(run_num))
     sys.stdout = sys.stderr = open("runs/run%d.log" % run_num, 'w')
 
+if RANDOM_SEED:
+    np.random.seed(12)
 
 def get_simulation_models(SCENARIO):
 
@@ -157,7 +169,7 @@ def get_simulation_models(SCENARIO):
         "nrh_simulate",         # non-residential rent hedonic
 
         # uses conditional probabilities
-        "households_relocation",
+        "household_relocation",
         "households_transition",
         # update building/unit/hh correspondence
         "reconcile_unplaced_households",
@@ -237,7 +249,7 @@ def get_simulation_models(SCENARIO):
 
     # calculate VMT taxes
     vmt_settings = \
-        orca.get_injectable("settings")["acct_settings"]["vmt_settings"]
+        orca.get_injectable("policy")["acct_settings"]["vmt_settings"]
     if SCENARIO in vmt_settings["com_for_com_scenarios"]:
         models.insert(models.index("office_developer"),
                       "subsidized_office_developer")
@@ -297,7 +309,7 @@ def run_models(MODE, SCENARIO):
                 "assign_tenure_to_new_units",
 
                 # uses conditional probabilities
-                "households_relocation",
+                "household_relocation",
                 "households_transition",
                 # update building/unit/hh correspondence
                 "reconcile_unplaced_households",
@@ -404,10 +416,12 @@ def run_models(MODE, SCENARIO):
         raise "Invalid mode"
 
 
-print "Started", time.ctime()
-print "Current Branch : ", BRANCH.rstrip()
-print "Current Commit : ", CURRENT_COMMIT.rstrip()
-print "Current Scenario : ", orca.get_injectable('scenario').rstrip()
+
+print("Started", time.ctime())
+print("Current Branch : ", BRANCH.rstrip())
+print("Current Commit : ", CURRENT_COMMIT.rstrip())
+print("Current Scenario : ", orca.get_injectable('scenario').rstrip())
+print("Random Seed : ", RANDOM_SEED)
 
 try:
     run_models(MODE, SCENARIO)
