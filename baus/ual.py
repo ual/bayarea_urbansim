@@ -12,7 +12,7 @@ from urbansim.developer.developer import Developer as dev
 from urbansim.models.relocation import RelocationModel
 from urbansim.utils import misc
 from urbansim_defaults import utils
-from utils import nearest_neighbor
+from baus.utils import nearest_neighbor
 
 
 ###############################################################################

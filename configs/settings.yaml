@@ -8,24 +8,31 @@ store: baus_model_data.h5
 
 # large baus files are stored in s3 - this key gives the settings for fetching them
 s3_settings:
-  bucket: bayarea_urbansim
+  bucket: bayarea-urbansim
+  dir: static/
   files:
-    - 2015_09_01_bayarea_v3.h5
-    - 2015_06_01_osm_bayarea4326.h5
+    # - 2015_09_01_bayarea_v3.h5
+    # - 2015_06_01_osm_bayarea4326.h5
     - 2015_12_21_zoning_parcels.csv
-    - 02_01_2016_parcels_geography.csv
+    - 07_11_2019_parcels_geography.csv
     - 2015_08_29_costar.csv
-    - 2015_08_03_tmnet.h5
+    - 2018_05_23_parcel_to_maz22.csv
+    - 2018_10_17_parcel_to_taz1454sub.csv
+    - walk_nodes.csv
+    - walk_edges.csv
+    - drive_nodes.csv
+    - drive_edges.csv
+    # - 2015_08_03_tmnet.h5
 
 # some info on where to get the accessibliity networks
-build_networks:
-  walk:
-      name: 2015_06_01_osm_bayarea4326.h5
-      max_distance: 3000
-  drive:
-      name: 2015_08_03_tmnet.h5
-      max_distance: 45
-      weight_col: "CTIMEA"
+# build_networks:
+#   walk:
+#       name: 2015_06_01_osm_bayarea4326.h5
+#       max_distance: 3000
+#   drive:
+#       name: 2015_08_03_tmnet.h5
+#       max_distance: 45
+#       weight_col: "CTIMEA"
 
 # these are the tables the get auto-merged to buildings/parcels in the hedonic and lcms
 aggregation_tables:

@@ -19,30 +19,30 @@ fitted: true
 
 fit_parameters:
     Coefficient:
-        Intercept: -31.06637029759289
-        ave_income_1500: 0.17566206845790727
-        np.log1p(sum_income_gen_tt_CAR_45): 2.0245303044144407
-        np.log1p(total_jobs_gen_tt_CAR_45): -1.415180259324019
-        residential_units_1500: 0.33389086921973643
-        sfdu: -0.245191588678402
-        sqft_per_unit: -0.0007914113645911295
+        Intercept: -32.27369082881825
+        ave_income_1500: 0.17589977630628553
+        np.log1p(sum_income_gen_tt_CAR_45): 2.1227662987340548
+        np.log1p(total_jobs_gen_tt_CAR_45): -1.5085233962475106
+        residential_units_1500: 0.3327101493418995
+        sfdu: -0.24444137408004082
+        sqft_per_unit: -0.000793019002024215
     Std. Error:
-        Intercept: 0.18842643628441977
-        ave_income_1500: 0.0017874991181922192
-        np.log1p(sum_income_gen_tt_CAR_45): 0.015515093704088573
-        np.log1p(total_jobs_gen_tt_CAR_45): 0.015346984529782429
-        residential_units_1500: 0.000969878846378356
-        sfdu: 0.0008097594632438575
-        sqft_per_unit: 2.189463212392143e-06
+        Intercept: 0.19052812843746572
+        ave_income_1500: 0.0017854161984516585
+        np.log1p(sum_income_gen_tt_CAR_45): 0.015684620963126603
+        np.log1p(total_jobs_gen_tt_CAR_45): 0.015503320908738853
+        residential_units_1500: 0.0009685252140035711
+        sfdu: 0.0008097789647219137
+        sqft_per_unit: 2.1850710843463003e-06
     T-Score:
-        Intercept: -164.87267344323087
-        ave_income_1500: 98.27253433028962
-        np.log1p(sum_income_gen_tt_CAR_45): 130.48779098774838
-        np.log1p(total_jobs_gen_tt_CAR_45): -92.2122685780854
-        residential_units_1500: 344.26038929143056
-        sfdu: -302.7955828959087
-        sqft_per_unit: -361.4636501366272
+        Intercept: -169.39068836447936
+        ave_income_1500: 98.520320617024
+        np.log1p(sum_income_gen_tt_CAR_45): 135.34061828618766
+        np.log1p(total_jobs_gen_tt_CAR_45): -97.30324264894703
+        residential_units_1500: 343.52244477620053
+        sfdu: -301.861847157248
+        sqft_per_unit: -362.92595133648
 
-fit_rsquared_adj: 0.46796646062040126
+fit_rsquared: 0.4690743275399457
 
-fit_rsquared: 0.4679725161242384
+fit_rsquared_adj: 0.4690682845768578

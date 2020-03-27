@@ -84,8 +84,8 @@ def add_buildings(buildings, new_buildings,
 # from df1 that are closest to each row in df2
 def nearest_neighbor(df1, df2):
     from sklearn.neighbors import KDTree
-    kdt = KDTree(df1.as_matrix())
-    indexes = kdt.query(df2.as_matrix(), k=1, return_distance=False)
+    kdt = KDTree(df1.values)
+    indexes = kdt.query(df2.values, k=1, return_distance=False)
     return df1.index.values[indexes]
 
 
@@ -93,7 +93,7 @@ def nearest_neighbor(df1, df2):
 def geom_id_to_parcel_id(df, parcels):
     s = parcels.geom_id  # get geom_id
     s = pd.Series(s.index, index=s.values)  # invert series
-    df["new_index"] = s.loc[df.index]  # get right parcel_id for each geom_id
+    df["new_index"] = s.reindex(df.index)  # get right parcel_id for each geom_id
     df = df.dropna(subset=["new_index"])
     df["new_index"] = df.new_index.astype('int')
     df = df.set_index("new_index", drop=True)
@@ -438,13 +438,13 @@ def run_feasibility(parcels, parcel_price_callback,
     if residential_to_yearly:
         df["residential"] *= pf.config.cap_rate
 
-    print "Describe of the yearly rent by use"
-    print df[pf.config.uses].describe()
+    print("Describe of the yearly rent by use")
+    print(df[pf.config.uses].describe())
 
     d = {}
     forms = forms_to_test or pf.config.forms
     for form in forms:
-        print "Computing feasibility for form %s" % form
+        print("Computing feasibility for form %s" % form)
         allowed = parcel_use_allowed_callback(form).loc[df.index]
 
         newdf = df[allowed]

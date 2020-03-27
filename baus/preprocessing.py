@@ -96,7 +96,7 @@ def move_jobs_from_portola_to_san_mateo_county(parcels, buildings, jobs_df):
 
 
 @orca.step()
-def preproc_jobs(store, baseyear_taz_controls, settings, parcels):
+def preproc_jobs(store, baseyear_taz_controls, mapping, parcels):
     # buildings = store['buildings']
     jobs = store['jobs']
 
@@ -104,7 +104,7 @@ def preproc_jobs(store, baseyear_taz_controls, settings, parcels):
     # jobs = allocate_jobs(baseyear_taz_controls, settings, buildings, parcels)
 
     # have to run this step from jobs allocations to get right columns
-    sector_map = settings["naics_to_empsix"]
+    sector_map = mapping["naics_to_empsix"]
     jobs['empsix'] = jobs['sector_id'].replace(sector_map)
 
     # this one i commented out only because it breaks using the UAL jobs table
@@ -315,7 +315,7 @@ def preproc_buildings(store, parcels, manual_edits):
     edits = edits[edits.table == 'buildings']
     for index, row, col, val in \
             edits[["id", "attribute", "new_value"]].itertuples():
-        df.set_value(row, col, val)
+        df.at[row, col] = val
 
     df["residential_units"] = df.residential_units.fillna(0)
 

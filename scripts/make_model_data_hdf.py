@@ -58,16 +58,11 @@ if __name__ == "__main__":
     parser.add_argument(
         '--output-fname', '-f', action='store', dest='output_fname',
         help='filename of the .h5 datastore')
-    parser.add_argument(
-        '--nodes-and-edges', '-n', action='store_true', dest='nodes_and_edges')
 
     options = parser.parse_args()
 
     if options.baseyear:
         baseyear = options.baseyear
-
-    if options.nodes_and_edges:
-        nodes_and_edges = options.nodes_and_edges
 
     if options.output_fname:
         data_store_fname = options.output_fname
@@ -228,22 +223,6 @@ if __name__ == "__main__":
     store.put('mtc_skims', mtc_skims, format='t')
     store.put('zones', zones, format='t')
     store.put('beam_skims_raw', beam_skims_raw, format='t')
-
-    if nodes_and_edges:
-
-        drive_nodes = pd.read_csv(os.path.join(
-            input_data_dir, csv_fnames['drive_nodes'])).set_index('osmid')
-        drive_edges = pd.read_csv(os.path.join(
-            input_data_dir, csv_fnames['drive_edges'])).set_index('uniqueid')
-        walk_nodes = pd.read_csv(os.path.join(
-            input_data_dir, csv_fnames['walk_nodes'])).set_index('osmid')
-        walk_edges = pd.read_csv(os.path.join(
-            input_data_dir, csv_fnames['walk_edges'])).set_index('uniqueid')
-
-        store.put('drive_nodes', drive_nodes, format='t')
-        store.put('drive_edges', drive_edges, format='t')
-        store.put('walk_nodes', walk_nodes, format='t')
-        store.put('walk_edges', walk_edges, format='t')
 
     store.keys()
 

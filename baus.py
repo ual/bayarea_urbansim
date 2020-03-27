@@ -427,8 +427,8 @@ try:
     run_models(MODE, SCENARIO)
 
 except Exception as e:
-    print traceback.print_exc()
+    print(traceback.print_exc())
     raise e
     sys.exit(0)
 
-print "Finished", time.ctime()
+print("Finished", time.ctime())

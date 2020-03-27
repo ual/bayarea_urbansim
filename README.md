@@ -4,7 +4,13 @@ DRAFT Bay Area UrbanSim (BAUS) Implementation
 
 ### How To
 1. Create .h5 datastore from .csv's stored on s3
-   ```ipython -i make_model_data_hdf.py -- -b -i s3://baus-data/spring_2019/ -o ../data```
+   ```python make_model_data_hdf.py -b -i s3://baus-data/spring_2019/ -o ../data```
+
+2. Fetch large, static MTC data from s3
+   ```python baus.py -c --mode fetch_data```
+
+3. Run pre-processing steps to download large static files and prepare tables for simulation 
+   ```python baus.py -c --mode preprocessing```
 
 
 =======

@@ -219,20 +219,20 @@ def get_config_file(type):
 
 @orca.step()
 def fetch_from_s3(settings):
-    import boto
+    import boto3
     # fetch files from s3 based on config in settings.yaml
     s3_settings = settings["s3_settings"]
 
-    conn = boto.connect_s3()
-    bucket = conn.get_bucket(s3_settings["bucket"], validate=False)
-
+    s3 = boto3.client('s3')
     for file in s3_settings["files"]:
-        file = os.path.join("data", file)
-        if os.path.exists(file):
+        if os.path.exists(os.path.join("data", file)):
             continue
         print("Downloading " + file)
-        key = bucket.get_key(file, validate=False)
-        key.get_contents_to_filename(file)
+        with open(os.path.join("data", file), 'wb') as f:
+            s3.download_fileobj(
+                s3_settings["bucket"],
+                os.path.join(s3_settings["dir"], file),
+                f)
 
 
 # key locations in the Bay Area for use as attractions in the models
@@ -258,7 +258,9 @@ def base_year_summary_taz():
 # non-residential rent data
 @orca.table(cache=True)
 def costar(store, parcels):
-    df = pd.read_csv(os.path.join(misc.data_dir(), '2015_08_29_costar.csv'))
+    df = pd.read_csv(
+        os.path.join(misc.data_dir(), '2015_08_29_costar.csv'),
+        encoding='latin')
 
     df["PropertyType"] = df.PropertyType.replace("General Retail", "Retail")
     df = df[df.PropertyType.isin(["Office", "Retail", "Industrial"])]
@@ -959,26 +961,30 @@ def tracts_earthquake():
 # to activitysynth which only temporarily requires them
 @orca.table(cache=True)
 def drive_nodes(store):
-    df = store['drive_nodes']
-    return df
+    drive_nodes = pd.read_csv(os.path.join(
+        misc.data_dir(), 'drive_nodes.csv')).set_index('osmid')
+    return drive_nodes
 
 
 @orca.table(cache=True)
 def drive_edges(store):
-    edges = store['drive_edges']
-    return edges
+    drive_edges = pd.read_csv(os.path.join(
+        misc.data_dir(), 'drive_edges.csv')).set_index('uniqueid')
+    return drive_edges
 
 
 @orca.table(cache=True)
 def walk_nodes(store):
-    df = store['walk_nodes']
-    return df
+    walk_nodes = pd.read_csv(os.path.join(
+        misc.data_dir(), 'walk_nodes.csv')).set_index('osmid')
+    return walk_nodes
 
 
 @orca.table(cache=True)
 def walk_edges(store):
-    edges = store['walk_edges']
-    return edges
+    walk_edges = pd.read_csv(os.path.join(
+        misc.data_dir(), 'walk_edges.csv')).set_index('uniqueid')
+    return walk_edges
 
 
 # this specifies the relationships between tables
