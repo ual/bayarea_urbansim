@@ -127,22 +127,22 @@ def parcel_id(jobs, buildings):
 #############################
 
 # move zone_id from buildings to residential units
-@orca.column('units', cache=True)
-def zone_id(units, buildings):
-    return misc.reindex(buildings.zone_id, units.building_id)
+@orca.column('residential_units', cache=True)
+def zone_id(residential_units, buildings):
+    return misc.reindex(buildings.zone_id, residential_units.building_id)
 
 
-@orca.column('units')
-def submarket_id(units, buildings):
+@orca.column('residential_units')
+def submarket_id(residential_units, buildings):
     # The submarket is used for supply/demand equilibration. It's the same
     # as the zone_id, but in a separate column to avoid name conflicts when
     # tables are merged.
-    return misc.reindex(buildings.zone_id, units.building_id)
+    return misc.reindex(buildings.zone_id, residential_units.building_id)
 
 
-@orca.column('units')
-def vacant_units(units, households):
-    return units.num_units.sub(
+@orca.column('residential_units')
+def vacant_units(residential_units, households):
+    return residential_units.num_units.sub(
         households.unit_id[
             households.unit_id != -1].value_counts(), fill_value=0)
 
@@ -269,7 +269,7 @@ def vmt_res_cat(buildings, vmt_fee_categories):
 
 
 @orca.column('buildings', cache=True)
-def residential_price(buildings, units, settings):
+def residential_price(buildings, residential_units, settings):
     """
     This was originally an orca.step in the ual code.  This allows model steps
     like 'price_vars' and 'feasibility' to read directly from the buildings
@@ -311,7 +311,7 @@ def residential_price(buildings, units, settings):
     '''
 
     cols = ['building_id', 'unit_residential_price', 'unit_residential_rent']
-    means = units.to_frame(cols).groupby(['building_id']).mean()
+    means = residential_units.to_frame(cols).groupby(['building_id']).mean()
 
     # Convert monthly rent to equivalent sale price
     cap_rate = settings.get('cap_rate')

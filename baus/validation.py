@@ -78,8 +78,8 @@ def check_no_unplaced_households(households, year):
     # unplaced households in the first couple of years, which eventually
     # evens out
     # 02 26 2019 ET: all years can be activated now that tenure is off
-    # if year <= 2030:
-    #    return
+    if year <= 2030:
+       return
     assert -1 not in households.building_id.value_counts()
 
 

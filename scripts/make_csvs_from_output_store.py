@@ -40,6 +40,11 @@ if __name__ == "__main__":
             if not os.path.exists(output_data_dir):
                 os.makedirs(output_data_dir)
 
+            # urbansim calls units "residential units" but activiysynth
+            # calls them "units"
+            if table_name == 'residential_units':
+                table_name = 'units'
+            
             fname = '{0}.csv'.format(table_name)
             output_filepath = os.path.join(output_data_dir, fname)
 

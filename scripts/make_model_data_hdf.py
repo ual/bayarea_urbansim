@@ -116,8 +116,10 @@ if __name__ == "__main__":
                 'state': str, 'bathrooms': str})
 
     units = pd.read_csv(
-        os.path.join(input_data_dir, csv_fnames['units']), index_col='unit_id',
-        dtype={'unit_id': int, 'building_id': int})
+        os.path.join(input_data_dir, csv_fnames['units']),
+        index_col='unit_id', dtype={
+            'unit_id': int, 'building_id': int,
+            'unit_residential_rent': float, 'unit_residential_price': float})
 
     try:
         households = pd.read_csv(
@@ -175,15 +177,15 @@ if __name__ == "__main__":
         'generalizedCost': 'gen_cost', 'origTaz': 'from_zone_id',
         'destTaz': 'to_zone_id'}, inplace=True)
 
-    print('Getting MTC data')
-    s3 = s3fs.S3FileSystem(anon=False)
-    with s3.open('bayarea-urbansim/MTCDATA.zip', 'rb') as z:
-        with zipfile.ZipFile(z) as zip_file:
-            for zip_info in zip_file.infolist():
-                if zip_info.filename[-1] == '/':
-                    continue
-                zip_info.filename = zip_info.filename.split('/')[-1]
-                zip_file.extract(zip_info, output_data_dir)
+    # print('Getting MTC data')
+    # s3 = s3fs.S3FileSystem(anon=False)
+    # with s3.open('bayarea-urbansim/MTCDATA.zip', 'rb') as z:
+    #     with zipfile.ZipFile(z) as zip_file:
+    #         for zip_info in zip_file.infolist():
+    #             if zip_info.filename[-1] == '/':
+    #                 continue
+    #             zip_info.filename = zip_info.filename.split('/')[-1]
+    #             zip_file.extract(zip_info, output_data_dir)
 
     # this data store is just a temp file that only needs to exist
     # while the simulation is running. data is stored as csv's
@@ -223,6 +225,20 @@ if __name__ == "__main__":
     store.put('mtc_skims', mtc_skims, format='t')
     store.put('zones', zones, format='t')
     store.put('beam_skims_raw', beam_skims_raw, format='t')
+
+    # drive_nodes = pd.read_csv(os.path.join(
+    #     input_data_dir, csv_fnames['drive_nodes'])).set_index('osmid')
+    # drive_edges = pd.read_csv(os.path.join(
+    #     input_data_dir, csv_fnames['drive_edges'])).set_index('uniqueid')
+    # walk_nodes = pd.read_csv(os.path.join(
+    #     input_data_dir, csv_fnames['walk_nodes'])).set_index('osmid')
+    # walk_edges = pd.read_csv(os.path.join(
+    #     input_data_dir, csv_fnames['walk_edges'])).set_index('uniqueid')
+
+    # store.put('drive_nodes', drive_nodes, format='t')
+    # store.put('drive_edges', drive_edges, format='t')
+    # store.put('walk_nodes', walk_nodes, format='t')
+    # store.put('walk_edges', walk_edges, format='t')
 
     store.keys()
 

@@ -749,8 +749,9 @@ def mtc_skims(store):
 
 
 @orca.table(cache=True)
-def units(store):
-    # return print_error_if_not_available(store, 'residential_units_preproc')
+def residential_units(store):
+    # MTC's model creates "residential_units" on the fly but we
+    # store them on disk as "units".
 
     df = store['units']
     if df.dtypes['tenure'] == np.int64:
@@ -989,11 +990,11 @@ def walk_edges(store):
 
 # this specifies the relationships between tables
 orca.broadcast(
-    'buildings', 'units', cast_index=True, onto_on='building_id')
+    'buildings', 'residential_units', cast_index=True, onto_on='building_id')
 orca.broadcast(
     'zones', 'buildings', cast_index=True, onto_on='zone_id')
 orca.broadcast(
-    'units', 'households', cast_index=True, onto_on='unit_id')
+    'residential_units', 'households', cast_index=True, onto_on='unit_id')
 orca.broadcast(
     'parcels_geography', 'buildings', cast_index=True, onto_on='parcel_id')
 orca.broadcast('parcels', 'buildings', cast_index=True, onto_on='parcel_id')

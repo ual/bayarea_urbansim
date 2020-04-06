@@ -40,7 +40,7 @@ NO_PROJECT = 611
 EARTHQUAKE = False
 OUTPUT_BUCKET = 'urbansim-outputs'
 OUT_TABLES = [
-    'parcels', 'jobs', 'households', 'buildings', 'units', 'zones',
+    'parcels', 'jobs', 'households', 'buildings', 'residential_units', 'zones',
     'establishments', 'persons', 'craigslist', 'mtc_skims',
     'beam_skims_raw', 'beam_skims_imputed',
     # these four tables are not used, just passed through from input

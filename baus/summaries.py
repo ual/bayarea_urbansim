@@ -573,7 +573,7 @@ def compare_to_targets(parcels, buildings, jobs, households, abag_targets,
 
 @orca.step()
 def diagnostic_output(households, buildings, parcels, taz, jobs, settings,
-                      zones, year, summary, run_number, units):
+                      zones, year, summary, run_number, residential_units):
     households = households.to_frame(
         households.local_columns + ['zone_id'])
     buildings = buildings.to_frame(
@@ -622,7 +622,7 @@ def diagnostic_output(households, buildings, parcels, taz, jobs, settings,
         query('general_type == "Residential"').groupby('zone_id').\
         residential_price.quantile()
     # these two are the original unit prices averaged up to the building id
-    ru = units
+    ru = residential_units
     zones['unit_residential_price'] = \
         ru.unit_residential_price.groupby(ru.zone_id).quantile()
     zones['unit_residential_rent'] = \
