@@ -12,6 +12,8 @@ DRAFT Bay Area UrbanSim (BAUS) Implementation
 3. Run pre-processing steps to download large static files and prepare tables for simulation 
    ```python baus.py -c --mode preprocessing```
 
+4. Run estimation
+   ```python baus.py -c --mode estimation```
 
 =======
 [![Build Status](https://travis-ci.org/UDST/bayarea_urbansim.svg?branch=master)](https://travis-ci.org/UDST/bayarea_urbansim)
