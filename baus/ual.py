@@ -451,10 +451,11 @@ def remove_old_units(buildings, residential_units):
     units = residential_units.to_frame(residential_units.local_columns)
     current_units = units[units.building_id.isin(buildings.index)]
 
-    print("Removing %d units from %d buildings that no longer exist" %
-          ((len(units) - len(current_units)),
-           (len(units.groupby('building_id')) -
-            len(current_units.groupby('building_id')))))
+    # this print statement takes hella long
+    # print("Removing %d units from %d buildings that no longer exist" %
+    #       ((len(units) - len(current_units)),
+    #        (len(units.groupby('building_id')) -
+    #         len(current_units.groupby('building_id')))))
 
     orca.add_table('residential_units', current_units)
 
