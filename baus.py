@@ -386,6 +386,7 @@ def run_models(MODE, SCENARIO):
             # "regional_vars",            # road network accessibility
             "rrh_estimate",         # estimate residential rental hedonic
             "rrh_simulate",
+            "wlcm_simulate",
             "hlcm_owner_estimate",  # estimate location choice owners
             "hlcm_renter_estimate",  # estimate location choice renters
         ])

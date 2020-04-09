@@ -13,6 +13,8 @@ from urbansim.models.relocation import RelocationModel
 from urbansim.utils import misc
 from urbansim_defaults import utils
 from baus.utils import nearest_neighbor
+from urbansim_templates import modelmanager as mm
+from urbansim_templates.models import LargeMultinomialLogitStep
 
 
 ###############################################################################
@@ -1041,3 +1043,26 @@ def balance_rental_and_ownership_hedonics(households, settings,
         utilization_ratio
 
     print("New cap rate = %.2f" % settings["cap_rate"])
+
+
+@orca.step()
+def wlcm_simulate(beam_skims_imputed):
+    """
+    Generate workplace location choices for the synthetic pop. This is just
+    a temporary workaround until the model templates themselves can handle
+    interaction terms. Otherwise the model template would normally not need
+    an addtional orca step wrapper such as is defined here.
+    """
+
+    if 'job_id' not in orca.get_table('persons').columns:
+        mm.initialize()
+
+        interaction_terms = beam_skims_imputed.to_frame().rename_axis(
+            ['zone_id_home', 'zone_id_work'])
+
+        m = mm.get_step('wlcm')
+
+        m.run(chooser_batch_size=200000, interaction_terms=[interaction_terms])
+
+        orca.broadcast(
+            'jobs', 'persons', cast_index=True, onto_on='job_id')

@@ -1153,3 +1153,141 @@ def zoned_build_ratio(parcels_zoning_calculations):
 def zoned_du_underbuild_nodev(parcels, parcels_zoning_calculations):
     return (parcels_zoning_calculations.zoned_du_underbuild *
             parcels.parcel_rules).astype('int')
+
+
+###############################
+#      WLCM dummy columns     #
+###############################
+
+@orca.column('jobs')
+def sector_retail(jobs):
+    return jobs['sector_id'].isin([44, 45]).astype(int)
+
+
+@orca.column('jobs')
+def sector_healthcare(jobs):
+    return jobs['sector_id'].isin([62]).astype(int)
+
+
+@orca.column('jobs')
+def sector_tech(jobs):
+    return jobs['sector_id'].isin([51, 54]).astype(int)
+
+
+@orca.column('jobs')
+def sector_food_and_hosp(jobs):
+    return jobs['sector_id'].isin([72]).astype(int)
+
+
+@orca.column('jobs')
+def sector_mfg(jobs):
+    return jobs['sector_id'].isin([31, 32, 33]).astype(int)
+
+
+@orca.column('jobs')
+def sector_edu_serv(jobs):
+    return jobs['sector_id'].isin([61]).astype(int)
+
+
+@orca.column('jobs')
+def sector_oth_serv(jobs):
+    return jobs['sector_id'].isin([81]).astype(int)
+
+
+@orca.column('jobs')
+def sector_constr(jobs):
+    return jobs['sector_id'].isin([23]).astype(int)
+
+
+@orca.column('jobs')
+def sector_gov(jobs):
+    return jobs['sector_id'].isin([92]).astype(int)
+
+
+@orca.column('jobs')
+def sector_fire(jobs):
+    return jobs['sector_id'].isin([52, 53]).astype(int)
+
+
+@orca.column('jobs')
+def sector_whlsale(jobs):
+    return jobs['sector_id'].isin([42]).astype(int)
+
+
+@orca.column('jobs')
+def sector_admin(jobs):
+    return jobs['sector_id'].isin([56]).astype(int)
+
+
+@orca.column('jobs')
+def sector_transport(jobs):
+    return jobs['sector_id'].isin([48]).astype(int)
+
+
+@orca.column('jobs')
+def sector_arts(jobs):
+    return jobs['sector_id'].isin([71]).astype(int)
+
+
+@orca.column('jobs')
+def sector_util(jobs):
+    return jobs['sector_id'].isin([22]).astype(int)
+
+
+# @orca.column('jobs')
+# def parcel_id(jobs, buildings):
+#     return misc.reindex(
+#         buildings.parcel_id, jobs.building_id)
+
+
+@orca.column('persons')
+def no_higher_ed(persons):
+    return (persons['edu'] < 21).astype(int)
+
+
+@orca.column('persons')
+def age_under_45(persons):
+    return (persons['age'] < 45).astype(int)
+
+
+@orca.column('households')
+def hh_inc_under_25k(households):
+    return ((
+        households['income'] < 25000) & (
+        households['income'] > 10)).astype(int)
+
+
+@orca.column('households')
+def hh_inc_25_to_75k(households):
+    return ((
+        households['income'] >= 25000) & (
+        households['persons'] < 75000)).astype(int)
+
+
+@orca.column('households')
+def hh_inc_75_to_200k(households):
+    return ((
+        households['income'] >= 75000) & (
+        households['income'] < 200000)).astype(int)
+
+
+# cols for WLCM interaction terms
+@orca.column('jobs')
+def zone_id_work(jobs, buildings, parcels):
+    return misc.reindex(
+        orca.merge_tables(
+            buildings, [buildings, parcels], columns=['zone_id'])['zone_id'],
+        jobs.building_id).astype(float)
+
+
+@orca.column('persons')
+def zone_id_home(store, persons):
+    hhru = pd.merge(
+        store['households'][['unit_id']], store['units'][['building_id']],
+        left_on='unit_id', right_index=True)
+    bp = pd.merge(
+        store['buildings'][['parcel_id']], store['parcels'][['zone_id']],
+        left_on='parcel_id', right_index=True)
+    all_merged = pd.merge(hhru, bp, left_on='building_id', right_index=True)
+    return misc.reindex(
+        all_merged['zone_id'], persons.household_id).astype(float)
