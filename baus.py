@@ -366,7 +366,6 @@ def run_models(MODE, SCENARIO):
             "generate_skims_vars",
             "skims_aggregations_drive",
             "neighborhood_vars",         # local accessibility variables
-            # "regional_vars",             # regional accessibility variables
             "rsh_estimate",              # residential sales hedonic
             "nrh_estimate",              # non-res rent hedonic
             "rsh_simulate",
@@ -383,9 +382,9 @@ def run_models(MODE, SCENARIO):
             "generate_skims_vars",
             "skims_aggregations_drive",
             "neighborhood_vars",        # street network accessibility
-            # "regional_vars",            # road network accessibility
             "rrh_estimate",         # estimate residential rental hedonic
             "rrh_simulate",
+            "price_vars",
             "wlcm_simulate",
             "hlcm_owner_estimate",  # estimate location choice owners
             "hlcm_renter_estimate",  # estimate location choice renters

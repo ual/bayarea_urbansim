@@ -1280,14 +1280,16 @@ def zone_id_work(jobs, buildings, parcels):
         jobs.building_id).astype(float)
 
 
-@orca.column('persons')
-def zone_id_home(store, persons):
-    hhru = pd.merge(
-        store['households'][['unit_id']], store['units'][['building_id']],
-        left_on='unit_id', right_index=True)
-    bp = pd.merge(
-        store['buildings'][['parcel_id']], store['parcels'][['zone_id']],
-        left_on='parcel_id', right_index=True)
-    all_merged = pd.merge(hhru, bp, left_on='building_id', right_index=True)
-    return misc.reindex(
-        all_merged['zone_id'], persons.household_id).astype(float)
+@orca.column('households')
+def zone_id_home(store, households):
+    # hhru = pd.merge(
+    #     store['households'][['unit_id']], store['units'][['building_id']],
+    #     left_on='unit_id', right_index=True)
+    # bp = pd.merge(
+    #     store['buildings'][['parcel_id']], store['parcels'][['zone_id']],
+    #     left_on='parcel_id', right_index=True)
+    # all_merged = pd.merge(hhru, bp, left_on='building_id', right_index=True)
+    all_merged = orca.merge_tables(
+        'residential_units',
+        ['residential_units', 'buildings', 'parcels'])[['zone_id']]
+    return all_merged.reindex(households.index)['zone_id']
